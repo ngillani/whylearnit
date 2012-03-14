@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>WhyLearn.it</title>
+    <meta name="description" content="WhyLearnIt site">
+    <meta name="author" content="John Connuck, Nabeel Gillani, Sam Birch">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <link href='css/common.css' rel='stylesheet' type='text/css'>
+    <style>
+        body{
+            margin: 0px;
+            background-color: #fff;
+            font-family: Georgia;
+        }
+
+        a{
+
+        }
+
+        /* top bar */
+        #logo{
+            float: left;
+            cursor: pointer;
+        }
+        #top-bar{
+            background-color: #aaa;
+            padding: 6px;
+            height: 48px;
+        }
+        .top-bar-button{
+            float: right;
+            border-radius: 3px;
+            background-color: #333;
+            font-size: 20px;
+            color: #fff;
+            font-family: Helvetica, Arial, sans-serif;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 10px 0 10px;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+        .top-bar-button:hover{
+            background-color: #666;
+        }
+        .top-bar-button > a{
+            text-decoration: none;
+            color: #fff;
+        }
+
+        /* featured video */
+        #main-video{
+            float: left;
+        }
+        #description-bar{
+            float: left;
+            padding: 20px;
+            padding-top: 0;
+            height: 385px;
+            width: 300px;
+        }
+        #description-bar > h3{
+            font-weight: bold;
+            font-size: large;
+            margin: 10px 0 10px 0;
+        }
+        #description-bar > h3:first-child{
+            margin-top: 0px !important;
+        }
+        #featured-content{
+            margin: 20px;
+        }
+
+        /* video list */
+        #videos{
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 400px;
+            margin: 20px;
+        }
+        #video-content{
+            /*height: 3000px;*/
+        }
+        .video{
+            width: 160px;
+            height: 96px;
+            display: inline-block;
+        }
+        .video img{
+            width: 160px;
+            height: 96px;
+        }
+
+
+
+        #watch-main-video{
+            margin: auto;
+            width: 640px;
+            margin-top: 20px;
+        }
+
+        #exercises-progress{
+            width: 75%;
+            margin: 20px auto 20px auto;
+            display: block;
+        }
+
+        .exercise{
+            margin: 20px;
+            padding: 20px;
+        }
+        .exercise-content {
+            float: left;
+            width: 400px;
+            height: 200px;
+            margin-left: 15px;
+        }
+        .exercise-content > textarea{
+            margin-top: 15px;
+            height: 100px;
+            width: 400px;
+        }
+        .exercise > img{
+            float: left;
+        }
+        .exercise > h3{
+            font-weight: bold;
+            font-size: large;
+            margin-bottom: 15px;
+        }
+        .completed{
+            background-color: #dfd;
+        }
+        .current{
+            background-color: #fff;
+        }
+        .incomplete{
+            background-color: #ddf;
+        }
+
+
+
+        #learn-more{
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff2cd;
+        }
+        #learn-more > ul{
+            margin-top: 20px;
+            margin-left: 40px;
+        }
+        #learn-more > ul > li{
+            margin: 20px 0 20px 0;
+        }
+        #learn-more > h2{
+            font-size: x-large;
+            font-weight: bold;
+        }
+        #related{
+            width: 75%;
+            background-color: #eee;
+            padding: 20px;
+            margin: auto;
+        }
+
+        /* pages */
+        #video-watch{
+            display: block;
+        }
+        #front-page{
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <nav id="top-bar">
+        <div id="logo"><a href="/"><img src="assets/logo.png" alt="WhyLearnIt logo" height="36" /></a></div>
+        <div id="for-educators" class="top-bar-button"><a href="for-educators.html">For Educators</a></div>
+        <div id="about" class="top-bar-button"><a href="about.html">About</a></div>
+        <div class="clear"></div>
+    </nav>
+
+    <div id="video-watch">
+        <div id="watch-main-video">
+                <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
+        </div>
+        <div id="exercises">
+            <progress id="exercises-progress" max="100" value="0"></progress>
+
+            <div class="exercise completed">
+                <h3>Exercise 1</h3>
+                <img src="assets/fake-visualizations/1.png" />
+                <div class="exercise-content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas?
+                    <textarea></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="exercise current">
+                <h3>Exercise 2</h3>
+                <img src="assets/fake-visualizations/2.png" />
+                <div class="exercise-content">
+                    Moloch! Moloch! Nightmare of Moloch! Moloch the loveless! Mental Moloch! Moloch the heavy judger of men!
+                    <textarea></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="exercise incomplete">
+                <h3>Exercise 3</h3>
+                <img src="assets/fake-visualizations/3.png" />
+                <div class="exercise-content">
+                    What sphinx of cement and aluminium bashed open their skulls and ate up their brains and imagination?
+                    <textarea></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div id="learn-more">
+            <h2>Learn more</h2>
+            <ul>
+                <li><a href="http://www.google.com">At...</a></li>
+                <li><a href="http://www.google.com">One...</a></li>
+                <li><a href="http://www.google.com">Of...</a></li>
+                <li><a href="http://www.google.com">These...</a></li>
+                <li><a href="http://www.google.com">Sites...</a></li>
+            </ul>
+        </div>
+        <div id="print"></div><div id="email"></div>
+        <div id="related">
+            <div class="video"><img src="" alt="video title" /></div>
+            <div class="video"><img src="" alt="video title" /></div>
+            <div class="video"><img src="" alt="video title" /></div>
+            <div class="video"><img src="" alt="video title" /></div>
+            <div class="video"><img src="" alt="video title" /></div>
+            <div class="video"><img src="" alt="video title" /></div>
+        </div>
+    </div>
+
+    <div id="front-page">
+        <div id="featured-content">
+            <div id="main-video">
+                <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
+            </div>
+            <div id="description-bar">
+                <h3>What is WhyLearnIt?</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras sed ipsum dui. In hac habitasse platea dictumst. Praesent consectetur, dui dictum condimentum auctor, tortor purus pulvinar augue, ut varius sapien enim id dui. Morbi quis lorem diam. Sed accumsan, neque nec aliquet malesuada, nibh risus gravida diam, quis dictum tortor dui in eros. Morbi sagittis mauris vel sem sollicitudin pretium. Mauris sed ante risus, ac porttitor nisi.</p>
+            </div>
+
+            <div class="clear"></div>
+        </div>
+
+        <div id="videos">
+            <div id="video-content">
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+                <div class="video"><img src="" alt="video title" /></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
