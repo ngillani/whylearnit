@@ -28,6 +28,7 @@ def getQuestionInfo(packetId):
 	for i in range(0,num_questions):
 
 		curr_question = {}
+		curr_question['QuestionId'] = questions[i].id
 		curr_question['QuestionText'] = questions[i].text
 		curr_question['Hint'] = questions[i].hint
 

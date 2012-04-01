@@ -9,6 +9,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/exercise-content/finance/finance.js"></script>
+    <script type="text/javascript" src="/site/js/site.js"></script>
+
+    <!--Load the GOOGLE CHARTS API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
 
@@ -19,10 +23,19 @@
 		  alert(XMLHttpRequest.responseText);
 		}});*/
 
-		prepareStockData();
+		google.load('visualization', '1.0', {'packages':['corechart']});
+		google.setOnLoadCallback(prepareExerciseVisulations);
 
-		// Declare relevant variables
-		var JS_FILE = 'finance.js';
+		function prepareExerciseVisulations(){
+
+			// found in <EXERCISE>.js.  Initialize the exercise content
+			// NOTE:  Assumes that init() doesn't have any asynchronous activity
+			init();
+
+			// found in <EXERCISE>.js.  Render charts/canvas/other interactive content
+			renderInteractiveContent();
+		}
+
 
 		// Pull in all of the question information 
 		$(document).ready(function(){
@@ -30,25 +43,16 @@
 			$.getJSON('/loadpacket/', {js_file : JS_FILE}, 
 			
 					function(data){
-						packetData = data;
-						// TODO:  Do stuff with the retrieved packetData
+						// Common function found in site.js
+						// Takes exercise info retrieved from the server
+						// and stuffs it into the right divs, etc.
+						populateExerciseContent(data);
 					}
 
 			);
 
 		});
     </script>
-
-    <!--Load the GOOGLE CHARTS API-->
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <!--<script type="text/javascript">
-    
-      // Load the Visualization API and the piechart package.
-      google.load('visualization', '1.0', {'packages':['corechart']});
-      
-      // Set a callback to run when the Google Visualization API is loaded.
-      google.setOnLoadCallback(drawChart);
-	</script>-->
 
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
     <style>
@@ -150,20 +154,23 @@
             display: block;
         }
 
+		.visual{
+			width:40%;
+			float:left;
+		}
+
         .exercise{
             margin: 20px;
             padding: 20px;
         }
         .exercise-content {
-            float: left;
-            width: 400px;
-            height: 200px;
+            width: 40%;
             margin-left: 15px;
         }
         .exercise-content > textarea{
             margin-top: 15px;
             height: 100px;
-            width: 400px;
+            width: 300px;
         }
         .exercise > img{
             float: left;
@@ -228,48 +235,61 @@
 
     <div id="video-watch">
         <div id="watch-main-video">
-                <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
+
         </div>
+
+
         <div id="exercises">
             <progress id="exercises-progress" max="100" value="0"></progress>
 
-            <div class="exercise completed">
+			<div id="packet-intro-text"></div>
+            <div class="exercise incomplete" id="exercise-1">
                 <h3>Exercise 1</h3>
-                <img src="/site/assets/fake-visualizations/1.png" />
+				<div class="visual" id="interactive-1"></div>
                 <div class="exercise-content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas?
+					<p> </p>
                     <textarea></textarea>
+					<div class="next-button"><button type="button" onclick="showNextExercise(1);">Next Step</button></div>
                 </div>
                 <div class="clear"></div>
             </div>
-            <div class="exercise current">
+
+            <div class="exercise incomplete" id="exercise-2" style="display:none;">
                 <h3>Exercise 2</h3>
-                <img src="/site/assets/fake-visualizations/2.png" />
+				<div class="visual" id="interactive-2"></div>
                 <div class="exercise-content">
-                    Moloch! Moloch! Nightmare of Moloch! Moloch the loveless! Mental Moloch! Moloch the heavy judger of men!
+					<p> </p>
                     <textarea></textarea>
+					<div class="next-button"><button type="button" onclick="showNextExercise(2);">Next Step</button></div>
                 </div>
                 <div class="clear"></div>
             </div>
-            <div class="exercise incomplete">
+
+            <div class="exercise incomplete" id="exercise-3" style="display:none;">
                 <h3>Exercise 3</h3>
-                <img src="/site/assets/fake-visualizations/3.png" />
+				<div class="visual" id="interactive-3"></div>
                 <div class="exercise-content">
-                    What sphinx of cement and aluminium bashed open their skulls and ate up their brains and imagination?
+					<p> </p>
+                    <textarea></textarea>
+					<div class="next-button"><button type="button" onclick="showNextExercise(3);">Next Step</button></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="exercise incomplete" id="exercise-4" style="display:none;">
+                <h3>Exercise 4</h3>
+				<div class="visual" id="interactive-4"></div>
+                <div class="exercise-content">
+					<p> </p>
                     <textarea></textarea>
                 </div>
                 <div class="clear"></div>
             </div>
         </div>
+
+
         <div id="learn-more">
             <h2>Learn more</h2>
-            <ul>
-                <li><a href="http://www.google.com">At...</a></li>
-                <li><a href="http://www.google.com">One...</a></li>
-                <li><a href="http://www.google.com">Of...</a></li>
-                <li><a href="http://www.google.com">These...</a></li>
-                <li><a href="http://www.google.com">Sites...</a></li>
-            </ul>
         </div>
         <div id="print"></div><div id="email"></div>
         <div id="related">
