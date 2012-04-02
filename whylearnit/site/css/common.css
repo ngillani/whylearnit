@@ -201,7 +201,7 @@ display: block;
   margin-bottom: 15px;
 }
 
-button.btn.btn-primary.next-button {
+button.next-button {
   float: right;
 }
 

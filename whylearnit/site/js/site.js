@@ -37,6 +37,9 @@ function populateExerciseContent(data){
 
 // Shows next exercise by toggling the display to be not none
 function showNextExercise(currExercise){
+        var currExerciseID = '#exercise-' + currExercise;
+        $(currExerciseID).removeClass('alert-info').addClass('alert-success');
+        $('.next-button', currExerciseID).removeClass('btn-primary').addClass('btn-success');
 	var nextExerciseId = 'exercise-' + (currExercise + 1);
 	$('#'+nextExerciseId).css('display', 'block');
 }
