@@ -7,6 +7,9 @@
     <meta name="description" content="WhyLearnIt site">
     <meta name="author" content="John Connuck, Nabeel Gillani, Sam Birch">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href='/site/css/bootstrap.css' rel='stylesheet' type='text/css'>
+    <link href='/site/css/bootstrap-responsive.css' rel='stylesheet' type='text/css'>
+    <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/exercise-content/finance/finance.js"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
@@ -55,179 +58,11 @@
     </script>
 
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
-    <style>
-        body{
-            margin: 0px;
-            background-color: #fff;
-            font-family: Georgia;
-        }
-
-        a{
-
-        }
-
-        /* top bar */
-        #logo{
-            float: left;
-            cursor: pointer;
-        }
-        #top-bar{
-            background-color: #aaa;
-            padding: 6px;
-            height: 48px;
-        }
-        .top-bar-button{
-            float: right;
-            border-radius: 3px;
-            background-color: #333;
-            font-size: 20px;
-            color: #fff;
-            font-family: Helvetica, Arial, sans-serif;
-            height: 36px;
-            line-height: 36px;
-            padding: 0 10px 0 10px;
-            margin-left: 15px;
-            cursor: pointer;
-        }
-        .top-bar-button:hover{
-            background-color: #666;
-        }
-        .top-bar-button > a{
-            text-decoration: none;
-            color: #fff;
-        }
-
-        /* featured video */
-        #main-video{
-            float: left;
-        }
-        #description-bar{
-            float: left;
-            padding: 20px;
-            padding-top: 0;
-            height: 385px;
-            width: 300px;
-        }
-        #description-bar > h3{
-            font-weight: bold;
-            font-size: large;
-            margin: 10px 0 10px 0;
-        }
-        #description-bar > h3:first-child{
-            margin-top: 0px !important;
-        }
-        #featured-content{
-            margin: 20px;
-        }
-
-        /* video list */
-        #videos{
-            overflow-y: auto;
-            overflow-x: hidden;
-            height: 400px;
-            margin: 20px;
-        }
-        #video-content{
-            /*height: 3000px;*/
-        }
-        .video{
-            width: 160px;
-            height: 96px;
-            display: inline-block;
-        }
-        .video img{
-            width: 160px;
-            height: 96px;
-        }
-
-
-
-        #watch-main-video{
-            margin: auto;
-            width: 640px;
-            margin-top: 20px;
-        }
-
-        #exercises-progress{
-            width: 75%;
-            margin: 20px auto 20px auto;
-            display: block;
-        }
-
-		.visual{
-			width:40%;
-			float:left;
-		}
-
-        .exercise{
-            margin: 20px;
-            padding: 20px;
-        }
-        .exercise-content {
-            width: 40%;
-            margin-left: 15px;
-        }
-        .exercise-content > textarea{
-            margin-top: 15px;
-            height: 100px;
-            width: 300px;
-        }
-        .exercise > img{
-            float: left;
-        }
-        .exercise > h3{
-            font-weight: bold;
-            font-size: large;
-            margin-bottom: 15px;
-        }
-        .completed{
-            background-color: #dfd;
-        }
-        .current{
-            background-color: #fff;
-        }
-        .incomplete{
-            background-color: #ddf;
-        }
-
-
-
-        #learn-more{
-            margin: 20px;
-            padding: 20px;
-            background-color: #fff2cd;
-        }
-        #learn-more > ul{
-            margin-top: 20px;
-            margin-left: 40px;
-        }
-        #learn-more > ul > li{
-            margin: 20px 0 20px 0;
-        }
-        #learn-more > h2{
-            font-size: x-large;
-            font-weight: bold;
-        }
-        #related{
-            width: 75%;
-            background-color: #eee;
-            padding: 20px;
-            margin: auto;
-        }
-
-        /* pages */
-        #video-watch{
-            display: block;
-        }
-        #front-page{
-            display: none;
-        }
-
-    </style>
 </head>
 <body>
+  <div class="container">
     <nav id="top-bar">
-        <div id="logo"><a href="/"><img src="/site/assets/logo.png" alt="WhyLearnIt logo" height="36" /></a></div>
+        <div id="logo" class='top-bar-button'><a href="/"><h1>whylearn.it</h1></a></div>
         <div id="for-educators" class="top-bar-button"><a href="for-educators.html">For Educators</a></div>
         <div id="about" class="top-bar-button"><a href="about.html">About</a></div>
         <div class="clear"></div>
@@ -240,18 +75,18 @@
 
 
         <div id="exercises">
-            <progress id="exercises-progress" max="100" value="0"></progress>
+            <div id="exercises-progress" class="progress progress-striped"><div class="bar" style="width: 33%"></div></div>
 
 			<div id="packet-intro-text"></div>
-            <div class="exercise incomplete" id="exercise-1">
+            <div class="exercise incomplete alert alert-info" id="exercise-1">
                 <h3>Exercise 1</h3>
 				<div class="visual" id="interactive-1"></div>
                 <div class="exercise-content">
-					<p> </p>
+                              <p> </p>
                     <textarea></textarea>
-					<div class="next-button"><button type="button" onclick="showNextExercise(1);">Next Step</button></div>
                 </div>
                 <div class="clear"></div>
+					<button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
             </div>
 
             <div class="exercise incomplete" id="exercise-2" style="display:none;">
@@ -260,7 +95,7 @@
                 <div class="exercise-content">
 					<p> </p>
                     <textarea></textarea>
-					<div class="next-button"><button type="button" onclick="showNextExercise(2);">Next Step</button></div>
+					<button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -271,7 +106,7 @@
                 <div class="exercise-content">
 					<p> </p>
                     <textarea></textarea>
-					<div class="next-button"><button type="button" onclick="showNextExercise(3);">Next Step</button></div>
+					<button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
                 </div>
                 <div class="clear"></div>
             </div>
@@ -292,13 +127,18 @@
             <h2>Learn more</h2>
         </div>
         <div id="print"></div><div id="email"></div>
-        <div id="related">
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
+          <div class="page-header">
+            <h1>Related Videos</h1>
+          </div>
+          <div id="related-wrapper" class="hero-unit">
+          <ul id="related" > 
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+          </ul>
         </div>
     </div>
 
@@ -362,6 +202,6 @@
             </div>
         </div>
     </div>
-
+  </div>
 </body>
 </html>

@@ -26,7 +26,7 @@ function populateExerciseContent(data){
 	var numQuestions = data['AllQuestions'].length;
 	for(var i = 1; i <= numQuestions; i++){
 		var currId = '#exercise-' + i;
-		$(currId).append(data['AllQuestions'][i-1]['QuestionText']);
+		$("p", currId).append(data['AllQuestions'][i-1]['QuestionText']);
 
 		// TODO:  Write in the hint as well!
 	}

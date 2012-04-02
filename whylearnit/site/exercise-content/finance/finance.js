@@ -103,7 +103,7 @@ function drawFirstChart(){
 
 	// Now, define options
 	var options = {
-		width : 500,
+		width : 600,
 		height: 300,
 		vAxis: {title : 'Price in USD($)'},
 		hAxis: {title: 'Day ranging from March 30, 2011 to March 30, 2012'},
