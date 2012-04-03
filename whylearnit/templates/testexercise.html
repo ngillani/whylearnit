@@ -10,6 +10,7 @@
     <link href='/site/css/bootstrap.css' rel='stylesheet' type='text/css'>
     <link href='/site/css/bootstrap-responsive.css' rel='stylesheet' type='text/css'>
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/exercise-content/finance/finance.js"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
@@ -61,15 +62,16 @@
   </head>
   <body>
     <div class="container">
-      <nav id="top-bar">
-      <div id="logo" class='top-bar-button'><a href="/"><h1>whylearn.it</h1></a></div>
-      <div id="for-educators" class="top-bar-button"><a href="for-educators.html">For Educators</a></div>
-      <div id="about" class="top-bar-button"><a href="about.html">About</a></div>
+      <div id="top-bar" class="navbar navbar-fixed-top">
+      <h1 id="logo" class="">whylearn.it?</h1>
+      <div id="for-educators" class="top-bar-button"><a href="for-educators.html">for educators</a></div>
+      <div id="about" class="top-bar-button"><a href="about.html">about</a></div>
       <div class="clear"></div>
-      </nav>
+      </div>
 
-      <div id="video-watch">
-        <div id="watch-main-video">
+      <div class="row">
+      <div id="video-watch" class="span8 offset2">
+        <div id="watch-main-video" class="well"> 
 
         </div>
 
@@ -84,9 +86,9 @@
             <div class="exercise-content">
               <p> </p>
               <textarea></textarea>
+              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
             </div>
             <div class="clear"></div>
-            <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
           </div>
 
           <div class="exercise incomplete alert alert-info" id="exercise-2" style="display:none;">
@@ -126,26 +128,31 @@
         <div id="learn-more">
           <h2>Learn more</h2>
         </div>
+        
+        <div class="clear"></div>
+
         <div id="print"></div><div id="email"></div>
         <div class="page-header">
           <h1>Related Videos</h1>
         </div>
-        <div id="related-wrapper" class="hero-unit">
-          <ul id="related" > 
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
+          <ul id="related" class="thumbnails"> 
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
           </ul>
-        </div>
       </div>
 
       <div id="front-page">
         <div id="featured-content">
           <div id="main-video">
-            <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
+            <iframe class="youtube-player" type="text/html" 
+              src="http://www.youtube.com/embed/2uYs0gJD-LE?wmode=transparent"
+              frameborder="0"></iframe>
           </div>
           <div id="description-bar">
             <h3>What is WhyLearnIt?</h3>

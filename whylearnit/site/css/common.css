@@ -56,6 +56,7 @@ table {
 
 /* styles begin ehre */
 body{
+  padding-top: 48px;
   margin: 0px;
   background-color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -67,34 +68,42 @@ a{
 
 /* top bar */
 #logo{
+  color: #fff;
+  background-color: #139bdf;
+  font-family: "Lovers Quarrel";
   float: left;
   cursor: pointer;
   font-size: 38px;
+  line-height: 38px;
+  padding: 5px;
+  padding-left: 70px;
+  padding-right: 40px;
+  margin: 0px;
 }
 
 #top-bar{
-  background-color: #aaa;
-  padding: 6px;
+  background-color: #36a9e3;
   height: 48px;
+  margin-bottom: 100px;
+  padding-right: 10px;
 }
 
 .top-bar-button{
   float: right;
-  border-radius: 3px;
-  background-color: #333;
-  font-size: 20px;
-  color: #fff;
+  border-radius: 0px 0px 3px 3px;
+  font-size: 18px;
+  border: 1px solid #139bdf; 
+  background-color: #139bdf;
   font-family: Helvetica, Arial, sans-serif;
-  height: 36px;
-  line-height: 36px;
+  line-height: 38px;
   padding: 0 10px 0 10px;
-  margin-left: 15px;
+  margin-right: 5px;
+  margin-top: -1px;
   cursor: pointer;
 }
 
 .top-bar-button:hover{
-  background-color: #666;
-
+  border: 1px solid #fff; 
 }
 
 .top-bar-button > a{
@@ -103,8 +112,7 @@ a{
 }
 
 /* featured video */
-#main-video{
-  float: left;
+#watch-main-video{
 }
 
 #description-bar{
@@ -112,7 +120,6 @@ a{
   padding: 20px;
   padding-top: 0;
   height: 385px;
-  width: 300px;
 }
 
 #description-bar > h3{
@@ -155,21 +162,21 @@ a{
 }
 
 #watch-main-video{
-  margin: auto;
-  width: 640px;
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 680px;
 }
 
 #exercises-progress{
   /* should probably auto-size with the width of the video, use some
   grid layout too */
-width: 640px;
-margin: 20px auto 20px auto;
-display: block;
+  margin: 20px auto 20px auto;
+  display: block;
+  width: 50%;
 }
 
 .exercise{
-  width: 640px;
   margin: 20px;
   margin-left: auto;
   margin-right: auto;
@@ -218,7 +225,6 @@ button.next-button {
 }
 
 #learn-more{
-  width: 640px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
@@ -239,17 +245,9 @@ button.next-button {
   font-weight: bold;
 }
 
-#related{
-  width: 100%;
-  background-color: #eee;
-  padding: 20px;
-  margin: auto;
-}
-
-#related-wrapper {
-  padding: 0px;
-  margin-right: auto;
-  margin-left: auto;
+.page-header {
+  font-size: x-large;
+  font-weight: bold;
 }
 
 /* pages */
@@ -259,4 +257,9 @@ button.next-button {
 
 #front-page{
   display: none;
+}
+
+.visual {
+  margin-left: auto;
+  margin-right: auto;
 }

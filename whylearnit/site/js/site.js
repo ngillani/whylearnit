@@ -7,6 +7,10 @@ Houses the common javascript for whylearn.it
 
 
 *************************************************/
+
+
+var V_WIDTH = 640;
+var V_HEIGHT = 390;
 var _currData = null;
 
 // Function that takes dictionary of exercise
@@ -16,7 +20,7 @@ function populateExerciseContent(data){
 
 	_currData = data;
 	// First, let's plug in the right video + the packet intro text
-	var videoCode = "<iframe class=\"youtube-player\" type=\"text/html\" width=\"640\" height=\"385\" src=\"" + data['AllMetadata']['VideoLink'] + "\" frameborder=\"0\"></iframe>";
+	var videoCode = "<iframe class=\"youtube-player\" type=\"text/html\" width=\""+ V_WIDTH + "\" height=\""+ V_HEIGHT +"\" src=\"" + data['AllMetadata']['VideoLink'] + "?wmode=transparent\" frameborder=\"0\" wmode=\"Opaque\"></iframe>";
 
 	$('#watch-main-video').append(videoCode);
 
