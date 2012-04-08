@@ -96,7 +96,7 @@ a{
   background-color: #139bdf;
   font-family: Helvetica, Arial, sans-serif;
   line-height: 38px;
-  padding: 0 10px 0 10px;
+  padding: 0 10px 0 10px;              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
   margin-right: 5px;
   margin-top: -1px;
   cursor: pointer;
@@ -146,6 +146,10 @@ a{
 
 #video-content{
   /*height: 3000px;*/
+}
+
+#video-title{
+	padding-top:25px;
 }
 
 .video{
