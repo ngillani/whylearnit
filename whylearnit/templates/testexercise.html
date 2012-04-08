@@ -56,6 +56,41 @@
         );
 
       });
+
+      $(document).ready(function(){
+        var originalPosition = $('#exercises-progress-container').offset().top;
+        var mode = 'normal';
+
+        var handler = function(event){
+          var topOfView = $(window).scrollTop() + 48; //top bar height included
+          var progressbarTop = $('#exercises-progress-container').offset().top;
+
+          console.log(progressbarTop, topOfView)
+          if (progressbarTop <= topOfView && mode == 'normal'){
+            originalPosition = $('#exercises-progress-container').offset().top;
+            mode = 'float';
+            console.log('switching to float')
+            $('#exercises-progress-container').css({
+              position: 'fixed',
+              top: 48,
+              left: 0,
+              borderBottom: '1px solid #000',
+              backgroundColor: '#fff'
+            });
+          }else if (originalPosition > topOfView && mode == 'float'){
+            mode = 'normal';
+            console.log('switching to normal')
+            $('#exercises-progress-container').css({
+              position: 'static',
+              backgroundColor: 'transparent',
+              border: 'none'
+            });
+          }
+        };
+
+        $(window).on('scroll', handler);
+        handler();
+      });
     </script>
 
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
@@ -78,7 +113,9 @@
 
 
         <div id="exercises">
-          <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
+          <div id="exercises-progress-container" style="width: 100%; z-index: 1000000;">
+            <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
+          </div>
 
           <div id="packet-intro-text"></div>
           <div class="exercise incomplete alert alert-info" id="exercise-1">
