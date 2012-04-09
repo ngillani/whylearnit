@@ -75,7 +75,7 @@
         var mode = 'normal';
 
         var handler = function(event){
-          var topOfView = $(window).scrollTop() + 48; //top bar height included
+          var topOfView = $(window).scrollTop() + 48 + 20; //top bar height included
           var progressbarTop = $('#exercises-progress-container').offset().top;
 
           console.log(progressbarTop, topOfView)
@@ -88,7 +88,7 @@
               top: 48,
               left: 0,
               borderBottom: '1px solid #000',
-              backgroundColor: '#fff'
+              backgroundColor: '#fff',
             });
           }else if (originalPosition > topOfView && mode == 'float'){
             mode = 'normal';

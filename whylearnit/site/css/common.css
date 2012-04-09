@@ -187,7 +187,7 @@ a{
   grid layout too */
   margin: 20px auto 20px auto;
   display: block;
-  width: 50%;
+  width: 480px; 
 }
 
 .exercise{
