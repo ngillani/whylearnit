@@ -12,25 +12,25 @@
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/site/exercise-content/finance/finance.js"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
-
-      /* Debugging!
-      $.ajaxSetup({"error":function(XMLHttpRequest,textStatus, errorThrown) {
-          alert(textStatus);
-          alert(errorThrown);
-          alert(XMLHttpRequest.responseText);
-      }});*/
-
       google.load('visualization', '1.0', {'packages':['corechart']});
       google.setOnLoadCallback(prepareExerciseVisulations);
 
-      function prepareExerciseVisulations(){
+      WhyLearnIt = {
+        packetLoaded: function(packet){
+          //!JOHN do your shit here.
+        }
+      };
+
+
+      console.log(document.location.fragment)
+
+      /*function prepareExerciseVisulations(){
 
         // found in <EXERCISE>.js.  Initialize the exercise content
         // NOTE:  Assumes that init() doesn't have any asynchronous activity
@@ -55,7 +55,7 @@
 
         );
 
-      });
+      });*/
 
       $(document).ready(function(){
         var originalPosition = $('#exercises-progress-container').offset().top;

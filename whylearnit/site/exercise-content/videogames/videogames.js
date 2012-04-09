@@ -5,12 +5,14 @@ videogames.js
 @date 4.8.2012
 **************************************************/
 
-var JS_FILE = 'videogames.js';
+WhyLearnIt.packetLoaded({
+	id: 'videogames',
+	title: 'Videogames',
+	questions: [],
+	init: function(){
 
-function init(){
-	
-}
-
-function renderInteractiveContent(){
-	console.log('Hello, world!');
-}
+	},
+	renderInteractiveContent: function(){
+		console.log('Hello, world!');
+	}
+});
