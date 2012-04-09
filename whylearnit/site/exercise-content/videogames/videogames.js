@@ -32,15 +32,3 @@ WhyLearnIt.packetLoaded((function(){
 
 	return packet;
 })());
-
-
-
-{
-	
-	init: function(){
-
-	},
-	renderInteractiveContent: function(){
-		console.log('Hello, world!');
-	}
-}
