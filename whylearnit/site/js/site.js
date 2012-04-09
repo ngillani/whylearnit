@@ -30,7 +30,7 @@ function populateExerciseContent(data){
 	var numQuestions = data['AllQuestions'].length;
 	for(var i = 1; i <= numQuestions; i++){
 		var currId = '#exercise-' + i;
-		$("p", currId).append(data['AllQuestions'][i-1]['QuestionText']);
+		$("p.question", currId).append(data['AllQuestions'][i-1]['QuestionText']);
 
 		// If this is a multiple choice question, write the choices
 		if(data['AllQuestions'][i-1]['Choices'] != null){
@@ -54,9 +54,14 @@ function populateExerciseContent(data){
 		}
 
 		// TODO:  Write in the hint as well!
+                $(".hint", currId).attr('data-content', data['AllQuestions'][i-1]['Hint']);
+                //$(".hint", currId).append(data['AllQuestions'][i-1]['Hint']);
 	}	
 
-				
+        $('.hint').popover({
+          "title": "Hint"
+        });
+
 	// Define what happens when a radio button is clicked!
 	$('input:radio').click(function(){
 		choiceOnClick();
