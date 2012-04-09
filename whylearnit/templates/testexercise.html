@@ -12,7 +12,6 @@
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/site/exercise-content/finance/finance.js" id="exercise-script"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
     <script type="text/javascript" src="/site/js/handlebars-runtime.js"></script>
     <script type="text/javascript" src="/site/js/handlebars.js"></script>
@@ -23,42 +22,24 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
-
-      /* Debugging!
-      $.ajaxSetup({"error":function(XMLHttpRequest,textStatus, errorThrown) {
-          alert(textStatus);
-          alert(errorThrown);
-          alert(XMLHttpRequest.responseText);
-      }});*/
-
-      // First, include the appropriate JS file
-      // var jsSource = '/site/exercise-content/' + JS_FILE.split('.')[0] + '/' + JS_FILE;
-	  
-
-	  
-
       google.load('visualization', '1.0', {'packages':['corechart']});
       google.setOnLoadCallback(prepareExerciseVisulations);
 
-      function prepareExerciseVisulations(){		
-
-        // found in <EXERCISE>.js.  Initialize the exercise content
-        // NOTE:  Assumes that init() doesn't have any asynchronous activity
-        init();
-
-        // found in <EXERCISE>.js.  Render charts/canvas/other interactive content
-        renderInteractiveContent();
-      }
+      WhyLearnIt = {
+        packetLoaded: function(packet){
+          //!JOHN do your shit here.
+        }
+      };
 
 
-      // Pull in all of the question information 
-      $(document).ready(function(){
+      console.log(document.location.fragment)
 
-		//TODO:  Don't hardcode the js file
+      /*
+		    //TODO:  Don't hardcode the js file
         $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
 
         function(data){
-	  var JS_FILE = data['AllMetadata']['JSFile'];
+	       var JS_FILE = data['AllMetadata']['JSFile'];
           // Common function found in site.js
           // Takes exercise info retrieved from the server
           // and stuffs it into the right divs, etc.
@@ -68,7 +49,7 @@
 
         );
 
-      });
+      });*/
 
       $(document).ready(function(){
         var originalPosition = $('#exercises-progress-container').offset().top;
