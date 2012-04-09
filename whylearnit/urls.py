@@ -27,4 +27,5 @@ urlpatterns = patterns('',
 
     # For testing purposes only!
     url(r'^testexercise/', 'whylearnit.views.testExercise'),
+
 )

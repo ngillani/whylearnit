@@ -14,6 +14,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/exercise-content/finance/finance.js" id="exercise-script"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
+    <script type="text/javascript" src="/site/js/handlebars-runtime.js"></script>
+    <script type="text/javascript" src="/site/js/handlebars.js"></script>
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -64,11 +66,59 @@
         );
 
       });
+
+      $(document).ready(function(){
+        var originalPosition = $('#exercises-progress-container').offset().top;
+        var mode = 'normal';
+
+        var handler = function(event){
+          var topOfView = $(window).scrollTop() + 48; //top bar height included
+          var progressbarTop = $('#exercises-progress-container').offset().top;
+
+          console.log(progressbarTop, topOfView)
+          if (progressbarTop <= topOfView && mode == 'normal'){
+            originalPosition = $('#exercises-progress-container').offset().top;
+            mode = 'float';
+            console.log('switching to float')
+            $('#exercises-progress-container').css({
+              position: 'fixed',
+              top: 48,
+              left: 0,
+              borderBottom: '1px solid #000',
+              backgroundColor: '#fff'
+            });
+          }else if (originalPosition > topOfView && mode == 'float'){
+            mode = 'normal';
+            console.log('switching to normal')
+            $('#exercises-progress-container').css({
+              position: 'static',
+              backgroundColor: 'transparent',
+              border: 'none'
+            });
+          }
+        };
+
+        $(window).on('scroll', handler);
+        handler();
+      });
     </script>
 
-    <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+      $(function() {
+          var source = $("#entry-template").html();
+          var template = Handlebars.compile(source);
+          var context = {title: "test", body: "body"}
+  /*        var context = {"vwidth": 960, "vheight": 540, "source": "blah",
+          "description": "This is a test."}; */
+          var html = template(context);
+          console.log(html);
+          $("body").append(html);
+          });
+</script> 
   </head>
   <body>
+<<<<<<< HEAD
+=======
     <div class="container">
       <div id="top-bar" class="navbar navbar-fixed-top">
       <h1 id="logo" class="">whylearn.it?</h1>
@@ -86,7 +136,9 @@
 
 
         <div id="exercises">
-          <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
+          <div id="exercises-progress-container" style="width: 100%; z-index: 1000000;">
+            <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
+          </div>
 
           <div id="packet-intro-text"></div>
           <div class="exercise incomplete alert alert-info" id="exercise-1">
