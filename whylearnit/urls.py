@@ -22,6 +22,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^loadpacket/', 'whylearnit.views.getPacketContent'),
 	url(r'^storePacketResponse/', 'whylearnit.views.storePacketResponse'),
+    url(r'^foreducators/', 'whylearnit.views.getForEducators'),
+    url(r'^about/', 'whylearnit.views.getAbout'),
 
     # For testing purposes only!
     url(r'^testexercise/', 'whylearnit.views.testExercise'),

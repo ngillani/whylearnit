@@ -96,7 +96,7 @@ a{
   background-color: #139bdf;
   font-family: Helvetica, Arial, sans-serif;
   line-height: 38px;
-  padding: 0 10px 0 10px;              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
+  padding: 0 10px 0 10px;             
   margin-right: 5px;
   margin-top: -1px;
   cursor: pointer;
@@ -150,6 +150,10 @@ a{
 
 #video-title{
 	padding-top:25px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size:28px;
+	color:#139bdf;
+	font-weight:bold;
 }
 
 .video{
@@ -194,6 +198,21 @@ a{
   height: 200px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.response-medium{
+  margin-top: 15px;
+}
+
+.response-medium > textarea{
+  height: 100px;
+  width: 100%;
+}
+
+.response-medium > input{
+  font-size: small;
+  margin-right:3px;
+  margin-left:10px;
 }
 
 .exercise-content > textarea{

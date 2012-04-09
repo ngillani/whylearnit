@@ -18,7 +18,8 @@ $.ajaxSetup({"error":function(XMLHttpRequest,textStatus, errorThrown) {
 }});*/
 
 // Constants!
-var JS_FILE = 'finance.js';
+var CHART_WIDTH = 600;
+var CHART_HEIGHT = 300;
 
 // File names for company stock data to visualize
 var _allCompanyData = {};
@@ -72,10 +73,17 @@ function findMaxEntries(){
 }
 
 function renderInteractiveContent(){
-	drawFirstChart();
+
+	// Build array of all company names
+	var keyArray = [];
+	for(key in _allCompanyData){
+		keyArray.push(key);
+	}
+
+	drawChart(keyArray, 'interactive-1');
 }
 
-function drawFirstChart(){
+function drawChart(companiesToPlot, elementId){
 	
 	var numPrices = findMaxEntries();
 	var data = new google.visualization.DataTable();
@@ -84,9 +92,10 @@ function drawFirstChart(){
 	data.addColumn('string', 'days');
 
 	// Add columns for each company	
-	for(var company in _allCompanyData){
-		data.addColumn('number', company);
+	for(var company in companiesToPlot){
+		data.addColumn('number', companiesToPlot[company]);
 	}
+
 
 	// Now, add rows
 	for(var i=0; i < numPrices; i++){
@@ -94,8 +103,8 @@ function drawFirstChart(){
 		var rowArray = new Array();
 		rowArray.push(""+_allPriceData['days'][i]);
 
-		for(var company in _allCompanyData){
-			rowArray.push(_allPriceData[company][i]);
+		for(var company in companiesToPlot){
+			rowArray.push(_allPriceData[companiesToPlot[company]][i]);
 		}
 
 		data.addRow(rowArray);
@@ -103,17 +112,31 @@ function drawFirstChart(){
 
 	// Now, define options
 	var options = {
-		width : 600,
-		height: 300,
+		width : CHART_WIDTH,
+		height: CHART_HEIGHT,
 		vAxis: {title : 'Price in USD($)'},
 		hAxis: {title: 'Day ranging from March 30, 2011 to March 30, 2012'},
 		seriesType: 'line',
 	};
 
-	var chart = new google.visualization.LineChart(document.getElementById("interactive-1"));
+	var chart = new google.visualization.LineChart(document.getElementById(elementId));
 	chart.draw(data, options);
 }
 
-function drawSecondChart(){
+function retrieveSelectedCompany(){
+	// First, get the company that the student has chosen
+	var chosenCompany = "";
+	$('.response-medium', '#exercise-1').each(function(){
+		chosenCompany = $(this).find('input:radio:checked')[0].value;
+	});
 
+	return chosenCompany;
+}
+
+//exerciseToRenderFor - the numerical value of the next exercise
+function refreshAllExerciseContent(exerciseToRenderFor){
+	
+	for(var i = 2; i <= exerciseToRenderFor; i++){
+		drawChart([retrieveSelectedCompany()], 'interactive-'+exerciseToRenderFor);
+	}
 }

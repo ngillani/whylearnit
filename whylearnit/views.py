@@ -10,6 +10,16 @@ def index(request):
 
     return render_to_response('index.html')
 
+# TODO: Change to render foreducators.html
+def getForEducators(request):
+
+	return render_to_response('index.html')
+
+# TODO: Change to render about.html
+def getAbout(request):
+
+	return render_to_response('index.html');
+
 
 
 def testExercise(request):
