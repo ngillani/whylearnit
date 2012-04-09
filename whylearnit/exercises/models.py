@@ -1,3 +1,7 @@
+# @author ngillani
+# @date 3.23.12
+# Database schema for exercise content
+
 from django.db import models
 
 # Create your models here.
@@ -74,4 +78,4 @@ class SampleAnswer(models.Model):
 	sample_text = models.CharField(max_length = 99999)
 	
 	def __unicode__(self):
-		return Question.objects.filter(pk == curr_question)[0]
+		return self.curr_question.text
