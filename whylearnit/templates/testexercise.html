@@ -33,7 +33,10 @@
       };
 
 
-      console.log(document.location.fragment)
+      var inject = document.createElement('script');
+      var id = document.location.hash.substring(1);
+      inject.src = '/site/js/exercise-content/' + id + '/' + id + '.js';
+      document.body.appendChild(inject);
 
       /*
 		    //TODO:  Don't hardcode the js file
