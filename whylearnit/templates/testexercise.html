@@ -13,6 +13,8 @@
     <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
+    <script type="text/javascript" src="/site/js/handlebars-runtime.js"></script>
+    <script type="text/javascript" src="/site/js/handlebars.js"></script>
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -30,26 +32,16 @@
 
       console.log(document.location.fragment)
 
-      /*function prepareExerciseVisulations(){
-
-        // found in <EXERCISE>.js.  Initialize the exercise content
-        // NOTE:  Assumes that init() doesn't have any asynchronous activity
-        init();
-
-        // found in <EXERCISE>.js.  Render charts/canvas/other interactive content
-        renderInteractiveContent();
-      }
-
-
-      // Pull in all of the question information 
-      $(document).ready(function(){
-
-        $.getJSON('/loadpacket/', {js_file : JS_FILE}, 
+      /*
+		    //TODO:  Don't hardcode the js file
+        $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
 
         function(data){
+	       var JS_FILE = data['AllMetadata']['JSFile'];
           // Common function found in site.js
           // Takes exercise info retrieved from the server
           // and stuffs it into the right divs, etc.
+
           populateExerciseContent(data);
         }
 
@@ -93,14 +85,25 @@
       });
     </script>
 
-    <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
+    <script type="text/javascript">
+      $(function() {
+          var source = $("#entry-template").html();
+          var template = Handlebars.compile(source);
+          var context = {title: "test", body: "body"}
+  /*        var context = {"vwidth": 960, "vheight": 540, "source": "blah",
+          "description": "This is a test."}; */
+          var html = template(context);
+          console.log(html);
+          $("body").append(html);
+          });
+</script> 
   </head>
   <body>
     <div class="container">
       <div id="top-bar" class="navbar navbar-fixed-top">
       <h1 id="logo" class="">whylearn.it?</h1>
-      <div id="for-educators" class="top-bar-button"><a href="for-educators.html">for educators</a></div>
-      <div id="about" class="top-bar-button"><a href="about.html">about</a></div>
+      <div id="for-educators" class="top-bar-button"><a href="/foreducators/">for educators</a></div>
+      <div id="about" class="top-bar-button"><a href="/about/">about</a></div>
       <div class="clear"></div>
       </div>
 
@@ -123,7 +126,9 @@
             <div class="visual" id="interactive-1"></div>
             <div class="exercise-content">
               <p> </p>
-              <textarea></textarea>
+
+			  <div class="response-medium"></div>
+
               <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
             </div>
             <div class="clear"></div>
@@ -134,7 +139,9 @@
             <div class="visual" id="interactive-2"></div>
             <div class="exercise-content">
               <p> </p>
-              <textarea></textarea>
+
+			  <div class="response-medium"></div>
+
               <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(2);">Next Step</button>
             </div>
             <div class="clear"></div>
@@ -145,7 +152,9 @@
             <div class="visual" id="interactive-3"></div>
             <div class="exercise-content">
               <p> </p>
-              <textarea></textarea>
+			  
+			  <div class="response-medium"></div>
+
               <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
             </div>
             <div class="clear"></div>
@@ -156,7 +165,7 @@
             <div class="visual" id="interactive-4"></div>
             <div class="exercise-content">
               <p> </p>
-              <textarea></textarea>
+			  <div class="response-medium"></div>
             </div>
             <div class="clear"></div>
           </div>

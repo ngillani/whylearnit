@@ -1,3 +1,7 @@
+# @author ngillani
+# @date 3.23.12
+# Database schema for exercise content
+
 from django.db import models
 
 # Create your models here.
@@ -52,7 +56,7 @@ class Choice(models.Model):
 	text = models.CharField(max_length = 9999)
 
 	def __unicode__(self):
-		return self.question
+		return self.text
 
 class Response(models.Model):
 	response_packet = models.ForeignKey(Packet)
@@ -67,3 +71,11 @@ class Response(models.Model):
 
 	def __unicode__(self):
 		return self.response_question
+
+class SampleAnswer(models.Model):
+
+	curr_question = models.ForeignKey(Question)
+	sample_text = models.CharField(max_length = 99999)
+	
+	def __unicode__(self):
+		return self.curr_question.text

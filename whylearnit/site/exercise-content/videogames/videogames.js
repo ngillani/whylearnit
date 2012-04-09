@@ -8,7 +8,6 @@ videogames.js
 WhyLearnIt.packetLoaded({
 	id: 'videogames',
 	title: 'Videogames',
-	questions: [],
 	init: function(){
 
 	},

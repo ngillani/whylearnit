@@ -54,9 +54,8 @@ table {
   clear: both;
 }
 
-/* styles begin ehre */
+/* styles begin here */
 body{
-  padding-top: 48px;
   margin: 0px;
   background-color: #fff;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -79,27 +78,38 @@ a{
   padding-left: 70px;
   padding-right: 40px;
   margin: 0px;
+  border-right: 1px solid #139bdf; 
 }
+
+#logo:hover {
+  border-right: 1px dashed #fff; 
+}
+
 
 #top-bar{
   background-color: #36a9e3;
   height: 48px;
-  margin-bottom: 100px;
   padding-right: 10px;
 }
 
 .top-bar-button{
   float: right;
-  border-radius: 0px 0px 3px 3px;
   font-size: 18px;
-  border: 1px solid #139bdf; 
   background-color: #139bdf;
   font-family: Helvetica, Arial, sans-serif;
   line-height: 38px;
-  padding: 0 10px 0 10px;              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
+  padding: 0 10px 0 10px;             
   margin-right: 5px;
   margin-top: -1px;
   cursor: pointer;
+  border: 1px solid #139bdf; 
+  -webkit-border-bottom-right-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+
 }
 
 .top-bar-button:hover{
@@ -150,6 +160,10 @@ a{
 
 #video-title{
 	padding-top:25px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size:28px;
+	color:#139bdf;
+	font-weight:bold;
 }
 
 .video{
@@ -196,6 +210,21 @@ a{
   margin-right: auto;
 }
 
+.response-medium{
+  margin-top: 15px;
+}
+
+.response-medium > textarea{
+  height: 100px;
+  width: 100%;
+}
+
+.response-medium > input{
+  font-size: small;
+  margin-right:3px;
+  margin-left:10px;
+}
+
 .exercise-content > textarea{
   margin-top: 15px;
   height: 100px;
@@ -214,6 +243,11 @@ a{
 
 button.next-button {
   float: right;
+}
+
+.visual {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .completed{
@@ -263,7 +297,3 @@ button.next-button {
   display: none;
 }
 
-.visual {
-  margin-left: auto;
-  margin-right: auto;
-}

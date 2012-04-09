@@ -1,4 +1,7 @@
-import models
+# @author ngillani
+# @date 4.8.12
+# Defines functions to return important database info for exercise content
+
 from whylearnit.exercises.models import *
 import json
 
