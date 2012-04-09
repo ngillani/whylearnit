@@ -133,10 +133,14 @@ function retrieveSelectedCompany(){
 	return chosenCompany;
 }
 
-//exerciseToRenderFor - the numerical value of the next exercise
-function refreshAllExerciseContent(exerciseToRenderFor){
+//Update the charts for problems 2 and 3 based on the selected company
+function refreshAllExerciseContent(){
 	
-	for(var i = 2; i <= exerciseToRenderFor; i++){
-		drawChart([retrieveSelectedCompany()], 'interactive-'+exerciseToRenderFor);
-	}
+	drawChart([retrieveSelectedCompany()], 'interactive-2');
+	drawChart([retrieveSelectedCompany()], 'interactive-3');
+}
+
+// Generic function, called whenever a radio button is selected
+function choiceOnClick(){
+	refreshAllExerciseContent();
 }

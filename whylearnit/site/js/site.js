@@ -52,17 +52,22 @@ function populateExerciseContent(data){
 		else{
 			$(".response-medium", currId).append('<textarea></textarea>');
 		}
-				
 
 		// TODO:  Write in the hint as well!
 	}	
+
+				
+	// Define what happens when a radio button is clicked!
+	$('input:radio').click(function(){
+		choiceOnClick();
+	});
 }
 
 // Shows next exercise by toggling the display to be not none
 function showNextExercise(currExercise){
 
 	// First, update the interactive content 
-	refreshAllExerciseContent(currExercise+1);		
+	refreshAllExerciseContent();		
 
 	// Show the next exercise!
 	var numExercises = $('.exercise').length;
