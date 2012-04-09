@@ -1,3 +1,4 @@
+{% load templatetag_handlebars %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,254 +14,162 @@
     <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="/site/js/site.js"></script>
-    <script type="text/javascript" src="/site/js/handlebars-runtime.js"></script>
-    <script type="text/javascript" src="/site/js/handlebars.js"></script>
     <script type="text/javascript" src="/site/js/bootstrap-tooltip.js"></script>
     <script type="text/javascript" src="/site/js/bootstrap-popover.js"></script>
+    {% handlebars_js %}
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
       google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(prepareExerciseVisulations);
 
       WhyLearnIt = {
         packetLoaded: function(packet){
           //!JOHN do your shit here.
-          console.log(packet);
+
+          var vidtpl = Handlebars.compile($('#video-tpl').html())
+          var vidrendered = vidtpl(packet);
+          $('#video-watch').append(vidrendered);
+
+          var extpl = Handlebars.compile($('#exercises-tpl').html())
+          var rendered = extpl(packet);
+          $('#exercises').append(rendered);
+
+          $('.hint').popover({
+            "title": "Hint"
+          });
+
+          $('.tooltip').tooltip();
         }
       };
 
 
-      var inject = document.createElement('script');
-      var id = document.location.hash.substring(1);
-      inject.src = '/site/js/exercise-content/' + id + '/' + id + '.js';
-      document.body.appendChild(inject);
-
-      /*
-		    //TODO:  Don't hardcode the js file
-        $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
-
-        function(data){
-	       var JS_FILE = data['AllMetadata']['JSFile'];
-          // Common function found in site.js
-          // Takes exercise info retrieved from the server
-          // and stuffs it into the right divs, etc.
-
-          populateExerciseContent(data);
-        }
-
-        );
-
-      });*/
-
-      $(document).ready(function(){
-        var originalPosition = $('#exercises-progress-container').offset().top;
-        var mode = 'normal';
-
-        var handler = function(event){
-          var topOfView = $(window).scrollTop() + 48 + 20; //top bar height included
-          var progressbarTop = $('#exercises-progress-container').offset().top;
-
-          console.log(progressbarTop, topOfView)
-          if (progressbarTop <= topOfView && mode == 'normal'){
-            originalPosition = $('#exercises-progress-container').offset().top;
-            mode = 'float';
-            console.log('switching to float')
-            $('#exercises-progress-container').css({
-              position: 'fixed',
-              top: 48,
-              left: 0,
-              borderBottom: '1px solid #139bdf',
-              backgroundColor: '#fff',
-            });
-          }else if (originalPosition > topOfView && mode == 'float'){
-            mode = 'normal';
-            console.log('switching to normal')
-            $('#exercises-progress-container').css({
-              position: 'static',
-              backgroundColor: 'transparent',
-              border: 'none'
-            });
-          }
-        };
-
-        $(window).on('scroll', handler);
-        handler();
+      $(function () {
+        var inject = document.createElement('script');
+        var id = document.location.hash.substring(1);
+        inject.src = '/packets/' + id + '/' + id + '.js';
+        document.body.appendChild(inject);
       });
-    </script>
+      /*
+      //TODO:  Don't hardcode the js file
+      $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
 
-    <script type="text/javascript">
-      $(function() {
-          var source = $("#entry-template").html();
-          var template = Handlebars.compile(source);
-          var context = {title: "test", body: "body"}
-  /*        var context = {"vwidth": 960, "vheight": 540, "source": "blah",
-          "description": "This is a test."}; */
-          var html = template(context);
-          console.log(html);
-          $("body").append(html);
+      function(data){
+        var JS_FILE = data['AllMetadata']['JSFile'];
+        // Common function found in site.js
+        // Takes exercise info retrieved from the server
+        // and stuffs it into the right divs, etc.
+
+        populateExerciseContent(data);
+      }
+
+      );
+
+    });*/
+
+    $(document).ready(function(){
+      var originalPosition = $('#exercises-progress-container').offset().top;
+      var mode = 'normal';
+
+      var handler = function(event){
+        var topOfView = $(window).scrollTop() + 48 + 20; //top bar height included
+        var progressbarTop = $('#exercises-progress-container').offset().top;
+
+        if (progressbarTop <= topOfView && mode == 'normal'){
+          originalPosition = $('#exercises-progress-container').offset().top;
+          mode = 'float';
+          $('#exercises-progress-container').css({
+            position: 'fixed',
+            top: 48,
+            left: 0,
+            borderBottom: '1px solid #139bdf',
+            backgroundColor: '#fff',
           });
-</script> 
-  </head>
-  <body>
-    <div class="container">
-      <div id="top-bar" class="navbar navbar-fixed-top">
+          }else if (originalPosition > topOfView && mode == 'float'){
+          mode = 'normal';
+          console.log('switching to normal')
+          $('#exercises-progress-container').css({
+            position: 'static',
+            backgroundColor: 'transparent',
+            border: 'none'
+          });
+        }
+      };
+
+      $(window).on('scroll', handler);
+      handler();
+    });
+  </script>
+
+</head>
+<body>
+  <div class="container">
+    <div id="top-bar" class="navbar navbar-fixed-top">
       <h1 id="logo" class="">whylearn.it?</h1>
       <div id="for-educators" class="top-bar-button"><a href="/foreducators/">for educators</a></div>
       <div id="about" class="top-bar-button"><a href="/about/">about</a></div>
       <div class="clear"></div>
-      </div>
-
-      <div class="row">
-      <div id="video-watch" class="span8 offset2">
-		<div id="video-title"> </div>
-        <div id="watch-main-video" class="well"> 
-
-        </div>
-
-
-        <div id="exercises">
-          <div id="exercises-progress-container" style="width: 100%; z-index: 1000000;">
-            <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
-          </div>
-
-          <div id="packet-intro-text"></div>
-          <div class="exercise incomplete alert alert-info" id="exercise-1">
-            <h3>Exercise 1</h3>
-            <div class="visual" id="interactive-1"></div>
-            <div class="exercise-content">
-              <p class="question"></p>
-              <button class="hint btn btn-info">Show Hint</button>
-              <div class="clear"></div>
-              <div class="response-medium"></div>
-              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
-              <div class="clear"></div>
-            </div>
-          </div>
-
-          <div class="exercise incomplete alert alert-info" id="exercise-2" style="display:none;">
-            <h3>Exercise 2</h3>
-            <div class="visual" id="interactive-2"></div>
-            <div class="exercise-content">
-              <p class="question"> </p>
-              <div class="response-medium"></div>
-
-              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(2);">Next Step</button>
-            </div>
-            <div class="clear"></div>
-          </div>
-
-          <div class="exercise incomplete alert alert-info" id="exercise-3" style="display:none;">
-            <h3>Exercise 3</h3>
-            <div class="visual" id="interactive-3"></div>
-            <div class="exercise-content">
-              <p class="question"> </p>
-			  
-			  <div class="response-medium"></div>
-
-              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
-            </div>
-            <div class="clear"></div>
-          </div>
-
-          <div class="exercise incomplete alert alert-info" id="exercise-4" style="display:none;">
-            <h3>Exercise 4</h3>
-            <div class="visual" id="interactive-4"></div>
-            <div class="exercise-content">
-              <p class="question"> </p>
-			  <div class="response-medium"></div>
-            </div>
-            <div class="clear"></div>
-          </div>
-        </div>
-
-
-        <div id="learn-more">
-          <h2>Learn more</h2>
-        </div>
-        
-        <div class="clear"></div>
-
-        <div id="print"></div><div id="email"></div>
-        <div class="page-header">
-          <h1>Related Videos</h1>
-        </div>
-          <ul id="related" class="thumbnails"> 
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-            <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
-          </ul>
-      </div>
-
-      <div id="front-page">
-        <div id="featured-content">
-          <div id="main-video">
-            <iframe class="youtube-player" type="text/html" 
-              src="http://www.youtube.com/embed/2uYs0gJD-LE?wmode=transparent"
-              frameborder="0"></iframe>
-          </div>
-          <div id="description-bar">
-            <h3>What is WhyLearnIt?</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras sed ipsum dui. In hac habitasse platea dictumst. Praesent consectetur, dui dictum condimentum auctor, tortor purus pulvinar augue, ut varius sapien enim id dui. Morbi quis lorem diam. Sed accumsan, neque nec aliquet malesuada, nibh risus gravida diam, quis dictum tortor dui in eros. Morbi sagittis mauris vel sem sollicitudin pretium. Mauris sed ante risus, ac porttitor nisi.</p>
-          </div>
-
-          <div class="clear"></div>
-        </div>
-
-        <div id="videos">
-          <div id="video-content">
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-            <div class="video"><img src="" alt="video title" /></div>
-          </div>
-        </div>
-      </div>
     </div>
-  </body>
+
+    <div id="video-watch"> 
+        {% tplhandlebars "video-tpl" %}
+        <div id="video-title">{{title}}</div>
+        <div id="watch-main-video" class="well">
+          <iframe class="youtube-player" type="text/html" width="650"
+            height="450"
+            src="http://www.youtube.com/embed/{{video}}?wmode=transparent"
+            frameborder="0" wmode="Opaque">
+          </iframe>
+        </div> 
+        {% endtplhandlebars %}
+      </div>
+      <div id="exercises">
+        <div id="exercises-progress-container" style="width: 100%; z-index: 1000000;">
+          <div id="exercises-progress" class="progress progress-striped"><div class="bar"></div></div>
+        </div>
+
+        {% tplhandlebars "exercises-tpl" %}
+        <div id="packet-intro-text">{{description}}</div>
+        {{#each exercises}}
+        <div class="exercise incomplete alert alert-info" id="exercise-{{exid}}">
+          <h3>Exercise {{exid}}</h3>
+          <div class="visual" id="interactive-{{exid}}">{{{this.visual}}}</div>
+          <div class="exercise-content">
+            <p class="question">{{{this.question}}}</p>
+            <button class="hint btn btn-info" data-content="{{this.hint}}">Show Hint</button>
+            <div class="clear"></div>
+            <div class="response-medium"></div>
+            <button type="button" class="btn btn-primary next-button" onclick="showNextExercise({{exid}});">Next Step</button>
+            <div class="clear"></div>
+          </div>
+        </div>
+        {{/each}}
+        {% endtplhandlebars %}
+      </div>
+
+      <div id="learn-more">
+        <h2>Learn more</h2>
+      </div>
+
+      <div class="clear"></div>
+
+      <div id="print"></div><div id="email"></div>
+      <div class="page-header">
+        <h1>Related Videos</h1>
+      </div>
+      <ul id="related" class="thumbnails"> 
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+        <li class="span2"><a href="#" class="thumbnail"><img src="http://placehold.it/160x120"  alt="video title" /></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
 </html>
