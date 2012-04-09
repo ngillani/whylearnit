@@ -31,13 +31,20 @@ function populateExerciseContent(data){
 	var numQuestions = data['AllQuestions'].length;
 	for(var i = 1; i <= numQuestions; i++){
 		var currId = '#exercise-' + i;
-		$("p", currId).append(data['AllQuestions'][i-1]['QuestionText']);
+		$("p.question", currId).append(data['AllQuestions'][i-1]['QuestionText']);
 
 		// TODO:  Check to see if there are any choices for a given question.  If so, populate as radio buttons
 				
 
 		// TODO:  Write in the hint as well!
+                $(".hint", currId).attr('data-content', data['AllQuestions'][i-1]['Hint']);
+                //$(".hint", currId).append(data['AllQuestions'][i-1]['Hint']);
 	}	
+
+        $('.hint').popover({
+          "title": "Hint"
+        });
+
 }
 
 // Shows next exercise by toggling the display to be not none

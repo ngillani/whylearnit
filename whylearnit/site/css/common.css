@@ -98,7 +98,7 @@ a{
   background-color: #139bdf;
   font-family: Helvetica, Arial, sans-serif;
   line-height: 38px;
-  padding: 0 10px 0 10px;              <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(3);">Next Step</button>
+  padding: 0 10px 0 10px;  
   margin-right: 5px;
   margin-top: -1px;
   cursor: pointer;
@@ -224,11 +224,16 @@ a{
 
 button.next-button {
   float: right;
+  margin-bottom: 10px;
 }
 
-.visual {
+.exercise > .visual {
   margin-left: auto;
   margin-right: auto;
+}
+
+.hint {
+  float: right;
 }
 
 .completed{
