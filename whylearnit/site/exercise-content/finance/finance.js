@@ -113,3 +113,7 @@ function drawFirstChart(){
 	var chart = new google.visualization.LineChart(document.getElementById("interactive-1"));
 	chart.draw(data, options);
 }
+
+function drawSecondChart(){
+
+}

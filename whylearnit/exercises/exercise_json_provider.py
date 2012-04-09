@@ -92,6 +92,7 @@ def getExerciseMetadata(packetId):
 	metadata_to_return['JSFile'] = packet_info.js_file
 	metadata_to_return['VideoLink'] = packet_info.vid_link
 	metadata_to_return['Description'] = packet_info.description
+	metadata_to_return['Name'] = packet_info.name
 
 	return metadata_to_return	
 

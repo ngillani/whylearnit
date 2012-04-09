@@ -9,13 +9,12 @@ Houses the common javascript for whylearn.it
 *************************************************/
 
 
-var V_WIDTH = 640;
-var V_HEIGHT = 390;
+var V_WIDTH = 700;
+var V_HEIGHT = 450;
 var _currData = null;
 
 // Function that takes dictionary of exercise
 // data and populates the appropriate divs.  
-// TODO:  Fill it in!
 function populateExerciseContent(data){
 
 	_currData = data;
@@ -24,6 +23,8 @@ function populateExerciseContent(data){
 
 	$('#watch-main-video').append(videoCode);
 
+	$('#video-title').append(data['AllMetadata']['Name']);
+
 	$('#packet-intro-text').append(data['AllMetadata']['Description']);
 
 	// Now, for each question, fill in the content in the corresponding div
@@ -31,6 +32,9 @@ function populateExerciseContent(data){
 	for(var i = 1; i <= numQuestions; i++){
 		var currId = '#exercise-' + i;
 		$("p", currId).append(data['AllQuestions'][i-1]['QuestionText']);
+
+		// TODO:  Check to see if there are any choices for a given question.  If so, populate as radio buttons
+				
 
 		// TODO:  Write in the hint as well!
 	}	
