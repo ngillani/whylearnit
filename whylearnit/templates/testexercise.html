@@ -30,7 +30,8 @@
       }});*/
 
       // First, include the appropriate JS file
-	  //var jsToWrite = '/site/exercise-content/' + JS_FILE.split('.')[0] + '/' + JS_FILE;
+      // var jsSource = '/site/exercise-content/' + JS_FILE.split('.')[0] + '/' + JS_FILE;
+	  
 
 	  
 
@@ -55,7 +56,7 @@
         $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
 
         function(data){
-		  var JS_FILE = data['AllMetadata']['JSFile'];
+	  var JS_FILE = data['AllMetadata']['JSFile'];
           // Common function found in site.js
           // Takes exercise info retrieved from the server
           // and stuffs it into the right divs, etc.
