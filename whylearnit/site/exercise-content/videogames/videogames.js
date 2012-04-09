@@ -21,6 +21,7 @@ WhyLearnIt.packetLoaded((function(){
 		exercises: [] //see loop below for format
 	};
 
+        //populate exercises
 	for(var i=0;i<questions.length;i++){
 		packet.exercises.push({
 			question: questions[i],
@@ -34,9 +35,7 @@ WhyLearnIt.packetLoaded((function(){
 })());
 
 
-
 {
-	
 	init: function(){
 
 	},
