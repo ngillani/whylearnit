@@ -62,6 +62,8 @@ function populateExerciseContent(data){
           "title": "Hint"
         });
 
+        $('.tip').tooltip();
+
 	// Define what happens when a radio button is clicked!
 	$('input:radio').click(function(){
 		choiceOnClick();
