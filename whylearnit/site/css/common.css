@@ -186,7 +186,6 @@ a{
   /* should probably auto-size with the width of the video, use some
   grid layout too */
   margin: 20px auto 20px auto;
-  display: block;
   width: 480px; 
 }
 
@@ -197,6 +196,7 @@ a{
   padding: 20px;
   color: #000;
 }
+
 
 .exercise-content {
   padding: 20px;
@@ -224,7 +224,7 @@ a{
   margin-bottom: 15px;
 }
 
-button.next-button {
+.next-button {
   float: right;
   margin-bottom: 10px;
 }

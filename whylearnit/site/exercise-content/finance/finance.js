@@ -58,55 +58,14 @@ util = {
 
                     return numPrices;
                   },
-  renderInteractiveContent: function(){
+  renderInteractiveContent: function(elementId){
                               // Build array of all company names
                               var keyArray = [];
                               for(key in _allCompanyData){
                                 keyArray.push(key);
                               }
-                              var element = document.createElement('div');
-                              this.drawChart(keyArray, element);
-                              console.log(element);
-                              return element;
+                              this.drawChart(keyArray, elementId);
                             },
-  drawChart: function(companiesToPlot, element){
-               var numPrices = this.findMaxEntries();
-               var data = new google.visualization.DataTable();
-
-               // Add column for days
-               data.addColumn('string', 'days');
-
-               // Add columns for each company	
-               for(var company in companiesToPlot){
-                 data.addColumn('number', companiesToPlot[company]);
-               }
-
-
-               // Now, add rows
-               for(var i=0; i < numPrices; i++){
-
-                 var rowArray = new Array();
-                 rowArray.push(""+_allPriceData['days'][i]);
-
-                 for(var company in companiesToPlot){
-                   rowArray.push(_allPriceData[companiesToPlot[company]][i]);
-                 }
-
-                 data.addRow(rowArray);
-               }
-
-               // Now, define options
-               var options = {
-                 width : CHART_WIDTH,
-                 height: CHART_HEIGHT,
-                 vAxis: {title : 'Price in USD($)'},
-                 hAxis: {title: 'Day ranging from March 30, 2011 to March 30, 2012'},
-                 seriesType: 'line',
-               };
-
-               var chart = new google.visualization.LineChart(element);
-               chart.draw(data, options);
-             },
   retrieveSelectedCompany: function(){
                              // First, get the company that the student has chosen
                              var chosenCompany = "";
@@ -126,5 +85,5 @@ util = {
 };
 
 util.init.call(util);
-var visuals = [ function () { util.renderInteractiveContent.call(util); }]
+var visuals = [ function () { util.renderInteractiveContent.call(util, 'interactive-1'); }]
 {% endblock render_visual %}

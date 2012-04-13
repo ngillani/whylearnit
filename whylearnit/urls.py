@@ -20,12 +20,11 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^packets/(\w+)/(\w+)', 'whylearnit.views.getPacketContent'),
+    url(r'^packets/(\w+)/(\w+).js', 'whylearnit.views.getPacketJS'),
     url(r'^storePacketResponse/', 'whylearnit.views.storePacketResponse'),
     url(r'^foreducators/', 'whylearnit.views.getForEducators'),
     url(r'^about/', 'whylearnit.views.getAbout'),
 
     # For testing purposes only!
-    url(r'^testexercise/', 'whylearnit.views.testExercise'),
-
+    url(r'^testexercise/(\w+)/(\w+)', 'whylearnit.views.testExercise'),
 )

@@ -1,36 +1,56 @@
 WhyLearnIt.packetLoaded((function(){
-    // this should be overwritten with a function that returns
-    // the html to be injected into the visual
-    {% block render_visual %}
-    {% endblock render_visual %}
+  {% block extra %}
+  {% endblock extra %}
 
+    
+  var visuals = 
+    {% block visuals%}
+      // sample
+      [ function (data) {
+          console.log("visual 1: ", data);
+        },
+        function (data) {
+          console.log("visual 2: ", data);
+        }]
+    {% endblock visuals %};
+
+  var renderVisuals = function (data) {
+    for (var i in visuals) {
+      var n = 1 + parseInt(i);
+      var selector = '#interactive-' + n;
+      visuals[i].call($(selector), data);
+    }
+  }
+
+  var exercises = 
     {% block load_exercises %}
-        var exercises = [
-        {% for question in questions %}
+    [ {% for question in questions %}
           {
               exid: {{forloop.counter}},
               question: "{{question.text}}",
               hint: "{{question.hint}}",
               responseType: "{{question.responseType}}",
-              choices: "{{question.choices}}",
+              choices: {{question.choices|safe}},
               visual: visuals[{{forloop.counter0}}]
           } {% if not forloop.last %}, {% endif %}
-        {% endfor %}
-        ]
+      {% endfor %} ]
     {% endblock load_exercises %}
 
     // individual packets can overwrite this info/extend it, but 
     // this is probably never necessary 
-    var packet = {
-          {% block packet %}
-                    id: '{{id}}',
-                    title: '{{title}}',
-                    description: '{{description}}',
-                    video: '{{videolink}}',
-                    related: "{{related}}", 
-                    exercises: exercises,
-          {% endblock packet %}
+  var packet = 
+    {% block packet %}
+    {
+        id: '{{id}}',
+        title: '{{title}}',
+        description: '{{description}}',
+        video: '{{videolink}}',
+        related: "{{related}}", 
+        exercises: exercises,
+        renderVisuals: renderVisuals
     };
+    {% endblock packet %} 
+   
     return packet;
-
 })());
+

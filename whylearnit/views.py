@@ -22,9 +22,9 @@ def getAbout(request):
 
 
 
-def testExercise(request):
-
-    return render_to_response('testexercise.html');
+def testExercise(request, folder, packet):
+    context = { 'folder': folder, 'packet': packet }
+    return render_to_response('testexercise.html', context);
 
 
 
@@ -46,18 +46,34 @@ def testExercise(request):
 	}
 
 '''
-def getPacketContent(request):
+def getPacketJS(request, folder, packet):
+        # note packet will probably switch from 'videogame.js' to a number, i.e.
+        # replacing packetId. URL routing should be updated
+        url = 'exercise-content/' + folder + '/' + packet + '.js';
+        print url
 
-	print request.GET	
-	js_file = request.GET['js_file']
+	packet = Packet.objects.get(js_file__startswith = packet)
 
-	packetId = Packet.objects.filter(js_file__startswith = js_file)[0].id
+	questions = Question.objects.filter(packet__pk = packet.id).all()
 
-	print 'packetId: ', packetId
-	
-	json_packet_content = getAllPacketContent(packetId)
-	print json_packet_content
-	return HttpResponse(json_packet_content)
+        for q in questions: 
+            q.choices = []
+            choices = Choice.objects.filter(question = q)
+            for choice in choices:
+              q.choices.append(str(choice.text))
+            print q.choices
+
+        context = {
+            'id': packet.id,
+            'interest': packet.interest,
+            'title': packet.name,
+            'description': packet.description,
+            'videolink': packet.vid_link,
+            'related': packet.related_packets.all(),
+            'questions': questions
+        }
+
+        return render_to_response(url, context, mimetype="text/javascript");
 
 
 
