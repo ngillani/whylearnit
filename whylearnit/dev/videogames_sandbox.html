@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		.button{
+			text-decoration: none;
+			display: inline-block;
+			background-color: #eee;
+			border: 1px solid #aaa;
+			border-radius: 4px;
+			padding: 10px;
+			color: #333;
+			font-weight: bold;
+			margin: 5px;
+			font-family: Helvetica, sans-serif;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+<body>
+
+	<canvas id="jumping" width="200" height="200" style="border: 1px solid #000;"></canvas>
+	<canvas id="height-graph" width="800" height="200" style="border: 1px solid #000;"></canvas>
+
+	<img src="character.png" id="character" style="display: none;" />
+	<br />
+	<a class="button" href="#real">Real gravity</a>
+	<br />
+	<a class="button" href="#linear">False gravity</a>
+	<br />
+
+	<div id="spaceship">
+		<canvas id="spaceship-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="spaceship-reset" class="button" type="button" value="Reset" />
+
+		<input data-y="-1" class="spaceship-control button" type="button" value="Up" />
+		<input data-y="1" class="spaceship-control button" type="button" value="Down" />
+		<input data-x="-1" class="spaceship-control button" type="button" value="Left" />
+		<input data-x="1" class="spaceship-control button" type="button" value="Right" />
+		<br />
+		<b>Initial:</b> <span id="spaceship-initial-state"></span>
+		<br />
+		<b>Current:</b> <span id="spaceship-current-state"></span>
+	</div>
+
+	<div id="frictionball">
+		<canvas id="frictionball-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="frictionball-reset" class="button" type="button" value="Run" />
+		<br />
+		<b>Initial:</b> <span id="frictionball-initial-state"></span>
+		<br />
+		<b>Current:</b> <span id="frictionball-current-state"></span>
+	</div>
+
+
+	<canvas id="particles-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+	<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+
+
+	<script>
+
+		function Body(x, y, vx, vy, ax, ay){
+			this.reset = function(){
+				this.x = x;
+				this.y = y;
+				this.vx = vx;
+				this.vy = vy;
+				this.ax = ax;
+				this.ay = ay;
+			};
+			this.reset();
+		}
+		Body.prototype.integrate = function(){
+			this.x += this.vx;
+			this.y += this.vy;
+			this.vx += this.ax;
+			this.vy += this.ay;
+			this.physics();
+		}
+		Body.prototype.physics = function(){}
+		Body.prototype.applyForce = function(x, y){
+			this.vx += x;
+			this.vy += y;
+		}
+		Body.prototype.getStateString = function(){
+			function round(n){return Math.round(n*100)/100;}
+			return 'position: (' + round(this.x) + ', ' + round(this.y) + '), velocity: (' + round(this.vx) + ', ' + round(this.vy) + '), acceleration: (' + round(this.ax) + ', ' + round(this.ay) + ')';
+		}
+
+
+		$(function(){
+			var spaceship = new Body(100, 100, 0, 0, 0, 0);
+			$('#spaceship-initial-state').text(spaceship.getStateString());
+
+			var ctx = document.getElementById('spaceship-canvas').getContext('2d');
+			ctx.strokeStyle = '#000';
+
+			$('#spaceship-reset').click(function(){
+				spaceship.reset();
+			})
+
+			$('.spaceship-control').click(function(e){
+				spaceship.applyForce(Number(e.target.dataset.x) || 0, Number(e.target.dataset.y) || 0);
+			});
+
+			spaceship.physics = function(){
+				if (this.y < 0){this.y += 200;}
+				if (this.x < 0){this.x += 200;}
+				if (this.y > 200){this.y -= 200;}
+				if (this.x > 200){this.x -= 200;}
+
+				if (this.theta === undefined){
+					this.theta = Math.PI/2;
+				}
+				this.theta = (this.theta + Math.atan2(this.vy, this.vx) + Math.PI/2) / 2;
+			}
+
+			function run(){
+				ctx.clearRect(0,0,200,200);
+				spaceship.integrate();
+				
+
+				$('#spaceship-current-state').text(spaceship.getStateString());
+
+				ctx.save()
+				ctx.translate(spaceship.x, spaceship.y);
+				ctx.rotate( spaceship.theta );
+				ctx.beginPath();
+				ctx.moveTo(0, 0);
+				ctx.lineTo(5, 15);
+				ctx.lineTo(-5, 15);
+				ctx.lineTo(0, 0);
+				ctx.stroke();
+				ctx.restore();
+			}
+
+			setInterval(run, 50);
+		});
+
+
+		$(document).ready(function(){
+			var ball = new Body(50, 140, 5, 0, 0, 0);
+			$('#frictionball-initial-state').text(ball.getStateString());
+			ball.vx = 0;
+
+			var ctx = document.getElementById('frictionball-canvas').getContext('2d');
+			ctx.strokeStyle = '#000';
+
+			$('#frictionball-reset').click(function(){
+				ball.reset();
+			})
+
+			ball.physics = function(){
+				this.ax = -this.vx * 0.02;
+			}
+
+			function run(){
+				ctx.clearRect(0,0,400,200);
+				ball.integrate();
+				
+				$('#frictionball-current-state').text(ball.getStateString());
+
+				ctx.beginPath();
+				ctx.moveTo(0, 150);
+				ctx.lineTo(400, 150);
+				ctx.stroke();
+
+				ctx.beginPath();
+				ctx.arc(ball.x, ball.y, 10, 0, Math.PI*2, true); 
+				ctx.closePath();
+				ctx.stroke();
+			}
+
+			setInterval(run, 50);
+		});
+
+		$(function(){
+			var particles = [];
+
+			var ctx = document.getElementById('particles-canvas').getContext('2d');
+			ctx.fillStyle = '#00f';
+
+			function run(){
+				ctx.clearRect(0,0,200,200);
+				var deleteList = [];
+				for(var i=0;i<particles.length;i++){
+					particles[i].integrate();
+					ctx.beginPath();
+					ctx.arc(particles[i].x, particles[i].y, 2, 0, Math.PI*2, true); 
+					ctx.closePath();
+					ctx.fill();
+					if (particles[i].x < 0 || particles[i].y < 0 || particles[i].x > 200 || particles[i].y > 200){
+						deleteList.push(i);
+					}
+				}
+
+				for(var i=0;i<deleteList.length;i++){
+					particles.splice(deleteList[i] - i, 1);
+				}
+
+				particles.push(new Body(100, 200, (Math.random()*2 - 1) * 0.2, -5, 0, 0.1));
+			}
+
+			setInterval(run, 50);
+		});
+
+		$(function(){
+			var nodes = [];
+
+			for(var y=0;y<10;y++){
+				for(var x=0;x<10;x++){
+					var node = new Body(x*10 + 50, y*10 + 50, 0, 0, 0, 0);
+					node.index = y*10 + x;
+					node.neighbors = [];
+					node.hasNeighbor = function(other){
+						for(var i=0;i<this.neighbors.length;i++){
+							if (this.neighbors[i] === other){return true;}
+						}
+						return false;
+					}
+					node.addNeighbor = function(other){
+						if (this.hasNeighbor(other)){return;}
+						this.neighbors.push(other);
+						other.neighbors.push(this);
+					}
+					nodes.push(node);
+				}
+			}
+			for(var y=0;y<10;y++){
+				for(var x=0;x<10;x++){
+					var i = y*10 + x;
+					if (y < 9){nodes[i].addNeighbor(nodes[ ((y+1)*10 + x) ]);}
+					if (y > 0){nodes[i].addNeighbor(nodes[ ((y-1)*10 + x) ]);}
+					if (x < 9){nodes[i].addNeighbor(nodes[ (y*10 + x + 1) ]);}
+					if (x > 0){nodes[i].addNeighbor(nodes[ (y*10 + x - 1) ]);}
+				}
+			}
+
+			var ctx = document.getElementById('fabric-canvas').getContext('2d');
+			ctx.fillStyle = '#000';
+
+			function run(){
+				ctx.clearRect(0,0,200,200);
+
+				for(var i=0;i<nodes.length;i++){
+					if (i != 0 && i != 9){
+						nodes[i].integrate();
+					}
+					for(var j=0;j<nodes[i].neighbors.length;j++){
+						//if (nodes[i].index < nodes[i].neighbors[j].index){
+							ctx.beginPath();
+							ctx.moveTo(nodes[i].x, nodes[i].y);
+							ctx.lineTo(nodes[i].neighbors[j].x, nodes[i].neighbors[j].y);
+							ctx.stroke();
+						//}
+					}
+
+					ctx.beginPath();
+					ctx.arc(nodes[i].x, nodes[i].y, 2, 0, Math.PI*2, true); 
+					ctx.closePath();
+					ctx.fill();
+					
+				}
+			}
+
+			setInterval(run, 50);
+		});
+
+
+		/*
+			TODO:
+				speed -> upward speed
+				is euclidean integration quite right? is this confusing?
+				wording and vocab!
+				sliders on all the examples!
+
+
+			Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
+			it look right on a computer.
+
+			We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
+			terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
+			going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.
+
+			1) So we have the height of the character. How does that change in time? We're going to start with falling.
+			When you're falling, your height is changing at some speed. Look at the example above and click "constant speed."
+			The character will fall with a speed that remains the same the whole time. Does that look right? If not, what looks
+			wrong? What do you think would make it look more realistic?
+			
+			2) So the last animation looked a little bit wrong. We know then that the speed that the character is moving as it falls isn't the
+			same for the entire fall. So the speed is in fact changing! We have a word for the speed at which speed itself is changing:
+			acceleration. Acceleration is caused by a force. The force acting on anything falling on earth is gravity of course. So gravity
+			makes things accelerate, which means that it increases the speed that they're falling as they fall. Check out the widget to the
+			right: does the falling look right now?
+
+			3) To make this more clear lets look at how the numbers change in another example. To the right is a table of times with the height,
+			speed, and acceleration at each time. Producing a new row of the table follows these rules:
+				1) Acceleration doesn't change (since gravity isn't changing!)
+				2) Speed is increased by the acceleration from the row above. (Acceleration is the speed at which speed is changing!)
+				3) Height is decreased by the speed from the row above. (Remember that it's a decrease, since the speed is downward!)
+			What's the next row of the table? Where is the character now?
+
+			time | height  | speed     | acceleration
+			0      100 m[1]  0 m/s [2]  10 m/s^2 [3]
+			1      100 m     10 m/s     10 m/s^2
+			2      90 m      20 m/s     10 m/s^2
+			3      70 m      30 m/s     10 m/s^2
+			4      40 m      40 m/s     10 m/s^2
+
+			[1] Note the units here. The units for height are simple: just meters -- the length of the distance between the character and the ground.
+			[2] Units for speed are meters per second (abbreviated m/s), which answers the question: how many meters is the height changing every second?
+			[3] Units for acceleration are tricky: meters per second per second (abbreviated m/s^2, squared because it's per second twice.) This answers
+			    the question: how many meters per second (speed) are changing every second?
+
+			4) How fast is the character going when they hit the ground?
+
+			5) In the previous example we used 10 m/s^2 as a value for acceleration. The real acceleration due to gravity is 9.8 m/s^2. If we re-did the
+			simulation using that number, the table would look like this:
+
+			time | height  | speed     | acceleration
+			0      100 m[1]  0 m/s [2]   9.8 m/s^2 [3]
+			1      100 m     9.8 m/s     9.8 m/s^2
+			2      90.2 m    19.6 m/s    9.8 m/s^2
+			3      70.6 m    29.4 m/s    9.8 m/s^2
+			4      41.2 m    39.2 m/s    9.8 m/s^2
+			5      2.0 m     49.0 m/s    9.8 m/s^2     
+			6      -47.0 m   58.8 m/s    9.8 m/s^2
+
+			Now look at what happens in second 6: the character has a negative height! That would mean they're below the ground, which we don't allow.
+			What's the deal here? What actually happens to the character?
+
+			6) Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
+			   make a model to simulate pretty much anything with these three variables. Let's extend falling to jumping. A jump is also a force, but
+			   it only happens for a moment: while you're pushing off the ground. Let's say the character jumps for 1 second giving them an acceleration
+			   of -20 m/s^2 for the first second (which means the jump itself is stronger than gravity, and then some). Let's say that gravity is 10 m/s^2
+			   again so the numbers are a little bit easier to work with.
+
+			time | height  | downward speed | acceleration
+			0      0 m [1]   0 m/s [2]       -20 m/s^2 [3]
+			1      0  m      -20 m/s [4]     10 m/s^2
+			2      20 m      -10 m/s         10 m/s^2
+			3      30 m      0 m/s [5]       10 m/s^2
+			4      30 m      10 m/s          10 m/s^2
+			5      20 m      20 m/s          10 m/s^2     
+			6      0 m       30 m/s          10 m/s^2
+			
+
+			[1] Remember that for a jump we're starting at the ground.
+			[2] And we start not moving.
+			[3] Acceleration is -20 m/s^2 due to the jump. After this second, the force from the jump is no longer being applied to the character
+			    and the acceleration is just that due to gravity.
+			[4] What's a negative speed mean? If we subtract a negative number, the subtractions cancel out and we're adding. In this case 0 m - (-20 m/s * 1 second) = 20m
+			
+			Explain:
+				[5] (When we've reached the top of the jump, we have no speed! This is the pause right before we start falling.)
+				How fast is the character moving when they hit the ground?
+
+
+			7) So all we had to do to simulate jumping after we had falling was change the initial acceleration! The rules didn't change at all.
+			   This setup is actually general enough to simulate physics on a single body! The only change we need to make is to understand everything
+			   in two directions instead of just one. When we were thinking about falling and jumping we were only thinking about the vertical position,
+			   but we also need to think about horizontal position if we want to simualate motion which isn't just up and down. So instead of height, we'll have
+			   position, consisting of an X and a Y coordinate. Similarly, speed is replaced by "velocity," which is the speed in the X and Y directions. Acceleration is still called acceleration, but we need to think of both X acceleration and Y acceleration.
+
+			   Once this is all done, if we think about the initial position, velocity, and acceleration as well as the forces that will act on the body we can do pretty much anything.
+				
+			   - Space ship (show force numbers)
+			   		(Initial conditions)
+			   		Press to apply a force in any direction. The ship points in the direction of its velocity.
+			   - Ball rolling with friction (show force numbers)
+			   		Initial conditions: position: (0,0), velocity: (50,0), acceleration: (0,0)
+			   		Friction is a little bit tricky: the friction force increases with how fast the ball is moving, so the force applied to the ball
+			   		increases as it goes faster, and goes down to zero as it stops.
+
+			   Multi-body systems can be even cooler:
+			   - Cloth simulation
+			   		This is 100 different bodies with lines drawn between them. Each connected body applies force to the body at the other end of the connection
+			   		in proportion to the difference between the spring's "ideal" length and its current length. Gravity also pulls all of the nodes down.
+			   		In addition two points are anchored (don't move regardless of the forces applied to them.)
+			   - Particle systems
+					You can also make fun, pretty things by playing with the numbers. This is a demonstration of a particle system.
+
+
+		*/
+
+
+		if (window.location.hash.length <= 1){
+			window.location.hash = '#real';
+		}
+		window.onhashchange = function(){window.location.reload();};
+
+		var context = document.getElementById('jumping').getContext('2d');
+		var graphContext = document.getElementById('height-graph').getContext('2d');
+
+
+		function render(state) {
+			context.clearRect(0,0,200,200);
+			var characterSprite = document.getElementById('character');
+			context.drawImage(characterSprite, state.character.x, state.character.y, state.character.width, state.character.height);
+
+			context.beginPath();
+			context.moveTo(0, state.character.y + state.character.height);
+			context.lineTo(200, state.character.y + state.character.height);
+			context.stroke();
+
+			if (state.timestep % 800 == 0) {
+				graphContext.beginPath();
+				graphContext.clearRect(0,0,800,200);
+				graphContext.moveTo(state.timestep % 800, state.character.y + state.character.height);
+			} else {
+				graphContext.lineTo(state.timestep % 800, state.character.y + state.character.height);
+			}
+			graphContext.stroke();
+		}
+
+
+		var state = {
+			mode: window.location.hash.substring(1),
+			timestep: 0,
+			character: {
+				x: 0, 
+				y: 10,
+				vx: 0,
+				vy: 0,
+				fx: 0,
+				fy: 0,
+				height: 60,
+				width: 45
+			}
+		};
+
+		function init(){
+			state.character.y = 10;
+			if (state.mode == 'real'){
+				state.character.fy = 0.4;
+				state.character.vy = 0;
+			}else if (state.mode == 'linear'){
+				state.character.fy = 0;
+				state.character.vy = 3;
+			}
+		}
+		init();
+
+		$(document).on('keypress', function(e){
+			if (e.which == 32 && state.character.y > 100){
+				if (state.mode == 'real'){
+					state.character.fy = 0.1;
+					state.character.vy = -5;
+				}else if (state.mode == 'linear'){
+					state.character.fy = 0;
+					state.character.vy = -3;
+					setTimeout(function(){ state.character.vy = 3; }, 2000);
+				}
+			}
+		})
+
+		function physics(){
+			if (state.mode == 'real'){
+				state.character.y += state.character.vy;
+				state.character.x += state.character.vx;
+				state.character.vx += state.character.fx;
+				state.character.vy += state.character.fy;
+			}else if (state.mode == 'linear'){
+				state.character.y += state.character.vy;
+				state.character.x += state.character.vx;
+				state.character.vx += state.character.fx;
+				state.character.vy += state.character.fy;
+			}
+
+			if (state.character.y + state.character.height > 200){
+				state.character.fy = 0;
+				state.character.vy = 0;
+				state.character.y = 200 - state.character.height;
+			}
+
+			render(state);
+			state.timestep++;
+		}
+
+
+		document.getElementById('character').onload = function(){
+			setInterval(physics, 50);
+		}
+
+	</script>
+
+
+</body>
+</html>

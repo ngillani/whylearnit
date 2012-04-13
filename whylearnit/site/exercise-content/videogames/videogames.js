@@ -9,7 +9,7 @@ WhyLearnIt.packetLoaded((function(){
 
 	var questions = [{% for question in questions %}'{{question}}'{% if not forloop.last %}, {% endif %}{% endfor %}];
 	var hints = [{% for hint in hints %}'{{hint}}'{% if not forloop.last%}, {% endif %}{% endfor %}];
-	var reponseTypes = [{% for responseType in responseTypes %}'{{responseType}}'{% if not forloop.last%}, {% endif %}{% endfor %}];
+	var reponseTypes = [{% for responseType in responseTypes %}'{{responseType}}'{% if not forloop.last %}, {% endif %}{% endfor %}];
 	var choices = [{% for choices in questionChoices %}{% for choice in choices %}'{{choice}}'{% if not forloop.last%}, {% endif %}{% endfor %}{% if not forloop.last%}, {% endif %}{% endfor %}];
 
 	var packet = {
