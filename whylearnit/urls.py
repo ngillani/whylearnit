@@ -26,6 +26,5 @@ urlpatterns = patterns('',
     url(r'^about/', 'whylearnit.views.getAbout'),
 
     # For testing purposes only!
-    url(r'^testexercise/(\w+)/(\w+)', 'whylearnit.views.testExercise'),
     url(r'^(\w+)/(\w+)', 'whylearnit.views.packet'),
 )
