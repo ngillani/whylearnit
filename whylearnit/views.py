@@ -24,7 +24,7 @@ def getAbout(request):
 
 
 def packet(request, folder, packet):
-    context = { 'folder': folder, 'packet': packet, 'exercise-templates/%s/%s.html' % (folder, packet) }
+    context = { 'folder': folder, 'packet': packet, 'exercise_template_path': 'exercise-templates/%s/%s.html' % (folder, packet) }
     return render_to_response('packet.html', context);
 
 ''' Function to retreive exercise content from the DB and 
