@@ -14,6 +14,7 @@
 
 {% extends "packet.js" %}
 {% block extra %}
+google.load('visualization', '1.0', {'packages':['corechart']});
 
 var CHART_WIDTH = 600;
 var CHART_HEIGHT = 300;

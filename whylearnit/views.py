@@ -22,9 +22,9 @@ def getAbout(request):
 
 
 
-def testExercise(request, folder, packet):
+def packet(request, folder, packet):
     context = { 'folder': folder, 'packet': packet }
-    return render_to_response('testexercise.html', context);
+    return render_to_response('packet.html', context);
 
 
 

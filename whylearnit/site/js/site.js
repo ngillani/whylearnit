@@ -14,14 +14,24 @@ var _currData = null;
 
 // Shows exercise by toggling the display to be not none
 function goToEx(currId, nextId) {
-        console.log(nextId);
-        for (var i = currId; i < nextId; ++i) {
-          $("#exercise-" + i).show();
-          $("#exercise-" + i).removeClass('alert-info').addClass('alert-success');
-          $(".btn-primary", "#exercise-" + i).removeClass('btn-primary').addClass('btn-success');
+        var numQuestions = $('.exercise').length;
+
+        if (nextId > numQuestions) {
+          console.log("100");
+          var percent = 100;
         }
-        $("#exercise-" + nextId).show();
-        $('html, body').animate({
-          scrollTop: $('#exercise-' + nextId).offset().top - 158
-        }, 1000);
+        else {
+          for (var i = currId; i < nextId; ++i) {
+            $("#exercise-" + i).show();
+            $("#exercise-" + i).removeClass('alert-info').addClass('alert-success');
+            $(".btn-primary", "#exercise-" + i).removeClass('btn-primary').addClass('btn-success');
+          }
+          $("#exercise-" + nextId).show();
+          $('html, body').animate({
+            scrollTop: $('#exercise-' + nextId).offset().top - 158
+          }, 1000);
+          var percent = (nextId - 1)* 100 / numQuestions; 
+        }
+
+        $('#exercises-progress > .bar').width( percent + '%');
 }
