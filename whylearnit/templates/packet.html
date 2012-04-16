@@ -172,7 +172,7 @@
       </div>
 
       {% tplhandlebars "exercises-tpl" %}
-      <div id="packet-intro-text">{{description}}</div>
+      <div id="packet-intro-text">{{{description}}}</div>
       {{#each exercises}}
       <div class="exercise incomplete alert alert-info" id="exercise-{{exid}}">
         <h3>Exercise {{exid}}</h3>

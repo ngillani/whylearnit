@@ -1,5 +1,6 @@
 {% load templatetag_handlebars %}
 {% tplhandlebars "videogames-visual-1" %}
+	Fake gravity:
 	<center>
 		<img src="character.png" id="videogames-visual-character" style="display: none;" />
 		<canvas id="videogames-visual-1-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
@@ -10,6 +11,7 @@
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-visual-2" %}
+	Real gravity:
 	<center>
 		<canvas id="videogames-visual-2-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
 		<canvas id="videogames-visual-2-height-graph" width="500" height="200" style="border: 1px solid #000;"></canvas>
@@ -19,11 +21,20 @@
 {% endtplhandlebars %}
 
 
+{% tplhandlebars "videogames-description" %}
+<p>Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
+it look right on a computer.</p>
+
+<p>We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
+terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
+going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.</p>
+{% endtplhandlebars %}
+
 {% tplhandlebars "videogames-exercises-1" %}
-So we have the height of the character. How does that change in time? We're going to start with falling.
+<p>So we have the height of the character. How does that change in time? We're going to start with falling.
 When you're falling, your height is changing at some speed. Look at the example above and click "constant speed."
 The character will fall with a speed that remains the same the whole time. Does that look right? If not, what looks
-wrong? What do you think would make it look more realistic?
+wrong? What do you think would make it look more realistic?</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-2" %}

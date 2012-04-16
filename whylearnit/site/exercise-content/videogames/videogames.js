@@ -10,10 +10,10 @@ videogames.js
 {% block visuals %}
 [
 	function (data) {
-		this.append($("#videogames-visual-1").html())
+		this.append($("#videogames-visual-1").html());
 	},
 	function (data){
-		
+		this.append($("#videogames-visual-2").html());
 	},
 	function (data){
 		
@@ -33,9 +33,12 @@ videogames.js
 
 {% block packet_mods %}
 
+packet.description = $('#videogames-description').html();
+
 packet.exercises = [];
 var i = 1;
 while(document.getElementById('videogames-exercises-' + i)){
+	var ts = i;
 	packet.exercises.push({
 		exid: i,
 		question: $('#videogames-exercises-' + i).html(),
