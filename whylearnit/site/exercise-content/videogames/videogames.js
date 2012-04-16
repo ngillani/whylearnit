@@ -10,6 +10,7 @@ videogames.js
 {% block visuals %}
 [
 	function (data) {
+		//visualization resize hooks
 		this.append($("#videogames-visual-1").html());
 	},
 	function (data){
