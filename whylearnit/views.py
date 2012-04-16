@@ -22,11 +22,10 @@ def getAbout(request):
 
 
 
-def testExercise(request, folder, packet):
-    context = { 'folder': folder, 'packet': packet, 'exercise_template_path': 'exercise-templates/%s/templates.html' % folder }
-    return render_to_response('testexercise.html', context);
 
-
+def packet(request, folder, packet):
+    context = { 'folder': folder, 'packet': packet, 'exercise-templates/%s/templates.html' % folder }
+    return render_to_response('packet.html', context);
 
 ''' Function to retreive exercise content from the DB and 
     return to the user.

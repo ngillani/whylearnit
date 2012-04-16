@@ -24,9 +24,6 @@
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
     <script>
-      google.load('visualization', '1.0', {'packages':['corechart']});
-      google.setOnLoadCallback(injectExercises);
-
       WhyLearnIt = {
         packet: {},
         data: {},  
@@ -70,12 +67,12 @@
       };
 
 
-      function injectExercises() {
+      $(function () {
         var inject = document.createElement('script');
         inject.src = '/packets/{{folder}}/{{packet}}.js';
         document.body.appendChild(inject);
         setTimeout(scrollStick, 500);
-      };
+      });
       /*
       //TODO:  Don't hardcode the js file
       $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
