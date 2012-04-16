@@ -18,14 +18,14 @@ def getForEducators(request):
 # TODO: Change to render about.html
 def getAbout(request):
 
-	return render_to_response('index.html');
+	return render_to_response('index.html')
 
 
 
 
 def packet(request, folder, packet):
     context = { 'folder': folder, 'packet': packet, 'exercise_template_path': 'exercise-templates/%s/%s.html' % (folder, packet) }
-    return render_to_response('packet.html', context);
+    return render_to_response('packet.html', context)
 
 ''' Function to retreive exercise content from the DB and 
     return to the user.

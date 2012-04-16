@@ -10,7 +10,7 @@ videogames.js
 {% block visuals %}
 [
 	function (data) {
-		
+		this.append($("#videogames-visual-1").html())
 	},
 	function (data){
 		
@@ -32,5 +32,21 @@ videogames.js
 
 
 {% block packet_mods %}
+
+packet.exercises = [];
+var i = 1;
+while(document.getElementById('videogames-exercises-' + i)){
+	packet.exercises.push({
+		exid: i,
+		question: $('#videogames-exercises-' + i).html(),
+		hint: '',
+		responseType: '',
+		choices: [],
+		visual: visuals[i-1]
+	});
+	i++;
+}
+
+console.log(packet)
 
 {% endblock packet_mods %}
