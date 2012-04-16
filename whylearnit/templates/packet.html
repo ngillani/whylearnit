@@ -22,8 +22,9 @@
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
     <script>
+    google.load('visualization', '1.0', {'packages':['corechart']});
+    google.setOnLoadCallback(injectJs);
       WhyLearnIt = {
         packet: {},
         data: {},  
@@ -56,7 +57,8 @@
           this.packet.renderVisuals(this.data);
 
           $('.hint').popover({
-            "title": "Hint"
+            "title": "Hint",
+            "placement": "top"
           });
 
           $('.tooltip').tooltip();
@@ -67,12 +69,12 @@
       };
 
 
-      $(function () {
+      function injectJs() {
         var inject = document.createElement('script');
         inject.src = '/packets/{{folder}}/{{packet}}.js';
         document.body.appendChild(inject);
         setTimeout(scrollStick, 500);
-      });
+      }
       /*
       //TODO:  Don't hardcode the js file
       $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
