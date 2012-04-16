@@ -7,15 +7,30 @@ videogames.js
 
 {% extends "packet.js" %}
 
-{% block render_visual %}
-var visuals = [ function (data) {
-	console.log('visuals loaded')
-	return '<p style="color: blue">Visual Oooooh</p>';
-}]
+{% block visuals %}
+[
+	function (data) {
+		
+	},
+	function (data){
+		
+	},
+	function (data){
+		
+	},
+	function (data){
+		
+	},
+	function (data){
+		
+	},
+	function (data){
 
-{% endblock render_visual %}
+	}
+];
+{% endblock visuals %}
 
 
 {% block packet_mods %}
-	
+
 {% endblock packet_mods %}
