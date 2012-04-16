@@ -193,8 +193,9 @@ body{
 #exercises-progress{
   /* should probably auto-size with the width of the video, use some
   grid layout too */
-  margin: 20px auto 20px auto;
+  margin: 10px auto 10px auto;
   width: 480px; 
+  border: 1px solid #139bdf;
 }
 
 .exercise{
@@ -294,12 +295,13 @@ body{
 }
 
 #sidebar {
+  height: 100%;
   position: fixed;
   left: 0;
   top: 0;
   width: 160px;
   padding: 0px;
-  padding-top: 58px;
+  padding-top: 62px;
   z-index: 20;
 }
 
@@ -309,6 +311,7 @@ body{
 }
 #sidebar li.active a {
   color: #fff;
+  background-color: #129bdf;
 }
 #sidebar li a i {
   padding: 10px;
