@@ -364,7 +364,8 @@
 			4) How fast is the character going when they hit the ground?
 
 			5) In the previous example we used 10 m/s^2 as a value for acceleration. The real acceleration due to gravity is 9.8 m/s^2. If we re-did the
-			simulation using that number, the table would look like this:
+			simulation using that number, the table would look like the above. Now look at what happens in second 6: the character has a negative height! That
+			 would mean they're below the ground, which we don't allow. What's the deal here? What actually happens to the character?
 
 			time | height  | speed     | acceleration
 			0      100 m[1]  0 m/s [2]   9.8 m/s^2 [3]
@@ -375,8 +376,7 @@
 			5      2.0 m     49.0 m/s    9.8 m/s^2     
 			6      -47.0 m   58.8 m/s    9.8 m/s^2
 
-			Now look at what happens in second 6: the character has a negative height! That would mean they're below the ground, which we don't allow.
-			What's the deal here? What actually happens to the character?
+			
 
 			6) Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
 			   make a model to simulate pretty much anything with these three variables. Let's extend falling to jumping. A jump is also a force, but

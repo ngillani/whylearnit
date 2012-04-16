@@ -17,5 +17,5 @@ var visuals = [ function (data) {
 
 
 {% block packet_mods %}
-	console.log('does this work?');
+	
 {% endblock packet_mods %}
