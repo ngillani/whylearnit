@@ -23,7 +23,7 @@ def getAbout(request):
 
 
 def testExercise(request, folder, packet):
-    context = { 'folder': folder, 'packet': packet, 'exercise_template_path': 'exercise-templates/%s/templates.html' % packet }
+    context = { 'folder': folder, 'packet': packet, 'exercise_template_path': 'exercise-templates/%s/templates.html' % folder }
     return render_to_response('testexercise.html', context);
 
 
