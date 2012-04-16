@@ -50,6 +50,10 @@ WhyLearnIt.packetLoaded((function(){
         renderVisuals: renderVisuals
     };
     {% endblock packet %} 
+
+    {% block packet_mods %}
+      //here you can put some javascript to break all the carefully constructed models & debug
+    {% endblock packet_mods %}
    
     return packet;
 })());

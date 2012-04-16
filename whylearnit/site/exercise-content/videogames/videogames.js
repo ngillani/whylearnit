@@ -9,7 +9,13 @@ videogames.js
 
 {% block render_visual %}
 var visuals = [ function (data) {
-  return '<p style="color: blue">Visual Oooooh</p>';
+	console.log('visuals loaded')
+	return '<p style="color: blue">Visual Oooooh</p>';
 }]
 
 {% endblock render_visual %}
+
+
+{% block packet_mods %}
+	console.log('does this work?');
+{% endblock packet_mods %}
