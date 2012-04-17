@@ -61,8 +61,8 @@ body{
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-a{
-
+.container-fluid {
+  padding: 0px;
 }
 
 /* top bar */
@@ -70,26 +70,27 @@ a{
   color: #fff;
   background-color: #139bdf;
   font-family: "Lovers Quarrel";
-  float: left;
   cursor: pointer;
   font-size: 38px;
   line-height: 38px;
   padding: 5px;
-  padding-left: 70px;
-  padding-right: 40px;
-  margin: 0px;
-  border-right: 1px solid #139bdf; 
+  padding-left: 40px;
+  width: 160px;
 }
-
-#logo:hover {
-  border-right: 1px dashed #fff; 
-}
-
 
 #top-bar{
   background-color: #36a9e3;
   height: 48px;
+  position: fixed;
   padding-right: 10px;
+  z-index: 1000;
+  width: 100%;
+}
+
+#top-bar-buttons {
+  position: fixed;
+  top: 0;
+  right: 10px;
 }
 
 .top-bar-button{
@@ -121,6 +122,9 @@ a{
   color: #fff;
 }
 
+#main {
+  padding-right: 20px;
+}
 /* featured video */
 #watch-main-video{
 }
@@ -182,11 +186,16 @@ a{
   width: 680px;
 }
 
+#exercises-progress-container {
+  width: 100%;
+}
+
 #exercises-progress{
   /* should probably auto-size with the width of the video, use some
   grid layout too */
-  margin: 20px auto 20px auto;
+  margin: 10px auto 10px auto;
   width: 480px; 
+  border: 1px solid #139bdf;
 }
 
 .exercise{
@@ -285,3 +294,25 @@ a{
   display: none;
 }
 
+#sidebar {
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 160px;
+  padding: 0px;
+  padding-top: 62px;
+  z-index: 20;
+}
+
+#sidebar li a{
+  padding: 8px 2;
+  color: #222;
+}
+#sidebar li.active a {
+  color: #fff;
+  background-color: #129bdf;
+}
+#sidebar li a i {
+  padding: 10px;
+}

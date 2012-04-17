@@ -1,8 +1,8 @@
+{% autoescape off %}
 WhyLearnIt.packetLoaded((function(){
   {% block extra %}
   {% endblock extra %}
 
-    
   var visuals = 
     {% block visuals%}
       // sample
@@ -30,7 +30,7 @@ WhyLearnIt.packetLoaded((function(){
               question: "{{question.text}}",
               hint: "{{question.hint}}",
               responseType: "{{question.responseType}}",
-              choices: {{question.choices|safe}},
+              choices: {{question.choices}},
               visual: visuals[{{forloop.counter0}}]
           } {% if not forloop.last %}, {% endif %}
       {% endfor %} ]
@@ -50,7 +50,11 @@ WhyLearnIt.packetLoaded((function(){
         renderVisuals: renderVisuals
     };
     {% endblock packet %} 
+
+    {% block packet_mods %}
+      //here you can put some javascript to break all the carefully constructed models & debug
+    {% endblock packet_mods %}
    
     return packet;
 })());
-
+{% endautoescape %}

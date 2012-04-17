@@ -7,9 +7,50 @@ videogames.js
 
 {% extends "packet.js" %}
 
-{% block render_visual %}
-var visuals = [ function (data) {
-  return '<p style="color: blue">Visual Oooooh</p>';
-}]
+{% block visuals %}
+[
+	function (data) {
+		//visualization resize hooks
+		this.append($("#videogames-visual-1").html());
+	},
+	function (data){
+		this.append($("#videogames-visual-2").html());
+	},
+	function (data){
+		
+	},
+	function (data){
+		
+	},
+	function (data){
+		
+	},
+	function (data){
 
-{% endblock render_visual %}
+	}
+];
+{% endblock visuals %}
+
+
+{% block packet_mods %}
+
+packet.description = $('#videogames-description').html();
+
+packet.exercises = [];
+var i = 1;
+while(document.getElementById('videogames-exercises-' + i)){
+	var ts = i;
+	packet.exercises.push({
+		exid: i,
+		question: $('#videogames-exercises-' + i).html(),
+		hint: '',
+		responseType: '',
+		choices: [],
+		visual: visuals[i-1]
+	});
+	i++;
+}
+
+console.log(packet)
+
+{% endblock packet_mods %}

@@ -1,0 +1,85 @@
+{% load templatetag_handlebars %}
+{% tplhandlebars "videogames-visual-1" %}
+	Fake gravity:
+	<center>
+		<img src="/site/exercise-content/videogames/character.png" id="videogames-visual-character" style="display: none;" />
+		<canvas id="videogames-visual-1-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
+		<canvas id="videogames-visual-1-height-graph" width="500" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="videogames-visual-1-run" class="btn" type="button" value="Run" />
+	</center>
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-visual-2" %}
+	Real gravity:
+	<center>
+		<canvas id="videogames-visual-2-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
+		<canvas id="videogames-visual-2-height-graph" width="500" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="videogames-visual-2-run" class="btn" type="button" value="Run" />
+	</center>
+{% endtplhandlebars %}
+
+
+{% tplhandlebars "videogames-description" %}
+<p>Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
+it look right on a computer.</p>
+
+<p>We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
+terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
+going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.</p>
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-exercises-1" %}
+<p>So we have the height of the character. How does that change in time? We're going to start with falling.
+When you're falling, your height is changing at some speed. Look at the example above and click "constant speed."
+The character will fall with a speed that remains the same the whole time. Does that look right? If not, what looks
+wrong? What do you think would make it look more realistic?</p>
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-exercises-2" %}
+So the last animation looked a little bit wrong. We know then that the speed that the character is moving as it falls isn't the
+same for the entire fall. So the speed is in fact changing! We have a word for the speed at which speed itself is changing:
+acceleration. Acceleration is caused by a force. The force acting on anything falling on earth is gravity of course. So gravity
+makes things accelerate, which means that it increases the speed that they're falling as they fall. Check out the widget to the
+right: does the falling look right now?
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-exercises-3" %}
+To make this more clear lets look at how the numbers change in another example. To the right is a table of times with the height,
+speed, and acceleration at each time. Producing a new row of the table follows these rules:
+<ol>
+	<li>Acceleration doesn't change (since gravity isn't changing!)</li>
+	<li>Speed is increased by the acceleration from the row above. (Acceleration is the speed at which speed is changing!)</li>
+	<li>Height is decreased by the speed from the row above. (Remember that it's a decrease, since the speed is downward!)</li>
+</ol>
+What's the next row of the table? Where is the character now?
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-exercises-4" %}
+How fast is the character going when they hit the ground?
+{% endtplhandlebars %}
+
+{% tplhandlebars "videogames-exercises-5" %}
+In the previous example we used 10 m/s^2 as a value for acceleration. The real acceleration due to gravity is 9.8 m/s^2. If we re-did the
+simulation using that number, the table would look like the above. Now look at what happens in second 6: the character has a negative height! That
+would mean they're below the ground, which we don't allow. What's the deal here? What actually happens to the character?
+{% endtplhandlebars %}
+
+
+{% tplhandlebars "videogames-exercises-6" %}
+Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
+make a model to simulate pretty much anything with these three variables. Let's extend falling to jumping. A jump is also a force, but
+it only happens for a moment: while you're pushing off the ground. Let's say the character jumps for 1 second giving them an acceleration
+of -20 m/s^2 for the first second (which means the jump itself is stronger than gravity, and then some). Let's say that gravity is 10 m/s^2
+again so the numbers are a little bit easier to work with.
+{% endtplhandlebars %}
+
+
+{% tplhandlebars "videogames-exercises-7" %}
+So all we had to do to simulate jumping after we had falling was change the initial acceleration! The rules didn't change at all.
+This setup is actually general enough to simulate physics on a single body! The only change we need to make is to understand everything
+in two directions instead of just one. When we were thinking about falling and jumping we were only thinking about the vertical position,
+but we also need to think about horizontal position if we want to simualate motion which isn't just up and down. So instead of height, we'll have
+position, consisting of an X and a Y coordinate. Similarly, speed is replaced by "velocity," which is the speed in the X and Y directions. Acceleration is still called acceleration, but we need to think of both X acceleration and Y acceleration.
+{% endtplhandlebars %}

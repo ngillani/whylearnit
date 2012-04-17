@@ -15,13 +15,14 @@
 			font-family: Helvetica, sans-serif;
 		}
 	</style>
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
 </head>
 <body>
 
 	<canvas id="jumping" width="200" height="200" style="border: 1px solid #000;"></canvas>
 	<canvas id="height-graph" width="800" height="200" style="border: 1px solid #000;"></canvas>
-
 	<img src="character.png" id="character" style="display: none;" />
 	<br />
 	<a class="button" href="#real">Real gravity</a>
@@ -52,12 +53,24 @@
 		<b>Initial:</b> <span id="frictionball-initial-state"></span>
 		<br />
 		<b>Current:</b> <span id="frictionball-current-state"></span>
+		<br />
+		Friction: <input type="range" id="frictionball-friction-slider" value="20" />
 	</div>
 
-
-	<canvas id="particles-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
-	<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
-
+	<div id="particles">
+		<canvas id="particles-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="particles-start" class="button" type="button" value="Start" />
+		<br />
+		Initial upwards velocity: <input type="range" id="particles-vertical-velocity-slider" value="4" min="0" max="6" />
+		<br />
+		Sideways velocity: <input type="range" id="particles-horizontal-velocity-slider" value="2" min="-4" max="4" />
+	</div>
+	<div id="fabric">
+		<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+		<br />
+		<input id="fabric-start" class="button" type="button" value="Start" />
+	</div>
 
 	<script>
 
@@ -153,7 +166,7 @@
 			})
 
 			ball.physics = function(){
-				this.ax = -this.vx * 0.02;
+				this.ax = -this.vx * $('#frictionball-friction-slider').val()/100 * 0.1;
 			}
 
 			function run(){
@@ -183,7 +196,7 @@
 			ctx.fillStyle = '#00f';
 
 			function run(){
-				ctx.clearRect(0,0,200,200);
+				ctx.clearRect(0,0,400,200);
 				var deleteList = [];
 				for(var i=0;i<particles.length;i++){
 					particles[i].integrate();
@@ -191,8 +204,11 @@
 					ctx.arc(particles[i].x, particles[i].y, 2, 0, Math.PI*2, true); 
 					ctx.closePath();
 					ctx.fill();
-					if (particles[i].x < 0 || particles[i].y < 0 || particles[i].x > 200 || particles[i].y > 200){
+					if (particles[i].y < 0 || particles[i] > 250){
 						deleteList.push(i);
+					}
+					if (particles[i].x < 0 || particles[i].x > 400){
+						particles[i].vx *= -1;
 					}
 				}
 
@@ -200,72 +216,102 @@
 					particles.splice(deleteList[i] - i, 1);
 				}
 
-				particles.push(new Body(100, 200, (Math.random()*2 - 1) * 0.2, -5, 0, 0.1));
+				for(var i=0;i<3;i++){
+					particles.push(new Body(
+						30,
+						196 + Math.random()*3,
+						((Math.random()*2 - 1) * 0.2) + Number($('#particles-horizontal-velocity-slider').val()),
+						-Number($('#particles-vertical-velocity-slider').val()),
+						0, 0.1));
+				}	
 			}
 
-			setInterval(run, 50);
+			$('#particles-start').click(function(){setInterval(run, 50);})
 		});
 
 		$(function(){
-			var nodes = [];
+			var runSimulation = function(){
+				var nodes = [];
 
-			for(var y=0;y<10;y++){
-				for(var x=0;x<10;x++){
-					var node = new Body(x*10 + 50, y*10 + 50, 0, 0, 0, 0);
-					node.index = y*10 + x;
-					node.neighbors = [];
-					node.hasNeighbor = function(other){
-						for(var i=0;i<this.neighbors.length;i++){
-							if (this.neighbors[i] === other){return true;}
+				for(var y=0;y<10;y++){
+					for(var x=0;x<10;x++){
+						var node = new Body(x*10 + 50, y*10 + 50, 0, 0, 0, 0.02);
+						node.index = y*10 + x;
+						node.neighbors = [];
+						node.hasNeighbor = function(other){
+							for(var i=0;i<this.neighbors.length;i++){
+								if (this.neighbors[i] === other){return true;}
+							}
+							return false;
 						}
-						return false;
+						node.addNeighbor = function(other){
+							if (this.hasNeighbor(other)){return;}
+							this.neighbors.push(other);
+							other.neighbors.push(this);
+						}
+						node.physics = function(){
+							this.vx *= 0.95;
+							this.vy *= 0.95;
+						}
+						nodes.push(node);
 					}
-					node.addNeighbor = function(other){
-						if (this.hasNeighbor(other)){return;}
-						this.neighbors.push(other);
-						other.neighbors.push(this);
-					}
-					nodes.push(node);
 				}
-			}
-			for(var y=0;y<10;y++){
-				for(var x=0;x<10;x++){
-					var i = y*10 + x;
-					if (y < 9){nodes[i].addNeighbor(nodes[ ((y+1)*10 + x) ]);}
-					if (y > 0){nodes[i].addNeighbor(nodes[ ((y-1)*10 + x) ]);}
-					if (x < 9){nodes[i].addNeighbor(nodes[ (y*10 + x + 1) ]);}
-					if (x > 0){nodes[i].addNeighbor(nodes[ (y*10 + x - 1) ]);}
-				}
-			}
-
-			var ctx = document.getElementById('fabric-canvas').getContext('2d');
-			ctx.fillStyle = '#000';
-
-			function run(){
-				ctx.clearRect(0,0,200,200);
-
-				for(var i=0;i<nodes.length;i++){
-					if (i != 0 && i != 9){
-						nodes[i].integrate();
+				for(var y=0;y<10;y++){
+					for(var x=0;x<10;x++){
+						var i = y*10 + x;
+						if (y < 9){nodes[i].addNeighbor(nodes[ ((y+1)*10 + x) ]);}
+						if (y > 0){nodes[i].addNeighbor(nodes[ ((y-1)*10 + x) ]);}
+						if (x < 9){nodes[i].addNeighbor(nodes[ (y*10 + x + 1) ]);}
+						if (x > 0){nodes[i].addNeighbor(nodes[ (y*10 + x - 1) ]);}
 					}
-					for(var j=0;j<nodes[i].neighbors.length;j++){
-						//if (nodes[i].index < nodes[i].neighbors[j].index){
-							ctx.beginPath();
-							ctx.moveTo(nodes[i].x, nodes[i].y);
-							ctx.lineTo(nodes[i].neighbors[j].x, nodes[i].neighbors[j].y);
-							ctx.stroke();
-						//}
-					}
-
-					ctx.beginPath();
-					ctx.arc(nodes[i].x, nodes[i].y, 2, 0, Math.PI*2, true); 
-					ctx.closePath();
-					ctx.fill();
-					
 				}
-			}
 
-			setInterval(run, 50);
+				var ctx = document.getElementById('fabric-canvas').getContext('2d');
+				ctx.fillStyle = '#000';
+
+				function run(){
+					ctx.clearRect(0,0,200,200);
+
+					for(var i=0;i<nodes.length;i++){
+						if (i != 0 && i != 9){
+							nodes[i].integrate();
+						}
+						for(var j=0;j<nodes[i].neighbors.length;j++){
+							if (nodes[i].index < nodes[i].neighbors[j].index){
+								ctx.beginPath();
+								ctx.moveTo(nodes[i].x, nodes[i].y);
+								ctx.lineTo(nodes[i].neighbors[j].x, nodes[i].neighbors[j].y);
+								ctx.stroke();
+							}
+							var distance = Math.sqrt( Math.pow(nodes[i].x - nodes[i].neighbors[j].x,2) + Math.pow(nodes[i].y - nodes[i].neighbors[j].y,2) );
+							var force = Math.abs(distance-5) * 0.01;
+							var angle = Math.atan2(nodes[i].y - nodes[i].neighbors[j].y,nodes[i].x - nodes[i].neighbors[j].x) + Math.PI;
+							nodes[i].vx += Math.cos(angle) * force;
+							nodes[i].vy += Math.sin(angle) * force;
+							nodes[i].neighbors[j].vx -= Math.cos(angle) * force;
+							nodes[i].neighbors[j].vy -= Math.sin(angle) * force;
+						}
+
+						ctx.beginPath();
+						ctx.arc(nodes[i].x, nodes[i].y, 2, 0, Math.PI*2, true); 
+						ctx.closePath();
+						ctx.fill();
+						
+					}
+				}
+
+				return setInterval(run, 50);
+			}
+			var interval = null;
+
+			$('#fabric-start').click(function(){
+				if (interval !== null){
+					clearInterval(interval);
+				}
+				interval = runSimulation();
+				$('#fabric-start').attr({'value': 'Restart'});
+			});
+
 		});
 
 
@@ -317,7 +363,8 @@
 			4) How fast is the character going when they hit the ground?
 
 			5) In the previous example we used 10 m/s^2 as a value for acceleration. The real acceleration due to gravity is 9.8 m/s^2. If we re-did the
-			simulation using that number, the table would look like this:
+			simulation using that number, the table would look like the above. Now look at what happens in second 6: the character has a negative height! That
+			 would mean they're below the ground, which we don't allow. What's the deal here? What actually happens to the character?
 
 			time | height  | speed     | acceleration
 			0      100 m[1]  0 m/s [2]   9.8 m/s^2 [3]
@@ -328,8 +375,7 @@
 			5      2.0 m     49.0 m/s    9.8 m/s^2     
 			6      -47.0 m   58.8 m/s    9.8 m/s^2
 
-			Now look at what happens in second 6: the character has a negative height! That would mean they're below the ground, which we don't allow.
-			What's the deal here? What actually happens to the character?
+			
 
 			6) Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
 			   make a model to simulate pretty much anything with these three variables. Let's extend falling to jumping. A jump is also a force, but
