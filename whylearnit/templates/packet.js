@@ -41,10 +41,10 @@ WhyLearnIt.packetLoaded((function(){
   var packet = 
     {% block packet %}
     {
-        id: '{{id}}',
-        title: '{{title}}',
-        description: '{{description}}',
-        video: '{{videolink}}',
+        id: "{{id}}",
+        title: "{{title}}",
+        description: "{{description}}",
+        video: "{{videolink}}",
         related: "{{related}}", 
         exercises: exercises,
         renderVisuals: renderVisuals
