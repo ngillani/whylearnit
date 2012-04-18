@@ -59,63 +59,23 @@ function CombinedCurve(allCurves){
 // 2.  Computing the new "combined curve" as a result
 Curve.prototype.translateAndRedraw = function(deltax, curvemainY, filterColor, ctx, shiftAmount){
 
+	var	newYPoints = [];
 	var combinedCurve = [];
-	ctx.strokeStyle = filterColor;
-	ctx.beginPath();
-	if(deltax > 0){
 
-		newYPoints = [];
-		for(var i = GRAPH_WIDTH; i > 0; i--){
+	if(deltax > 0){
+		for(var i = GRAPH_WIDTH; i >= 0; i--){
 			newYPoints[(i+shiftAmount) % GRAPH_WIDTH] = this.ypoints[i];
 			combinedCurve[(i+shiftAmount) % GRAPH_WIDTH] = this.ypoints[i]+curvemainY[i] - GRAPH_HEIGHT/2;
 		}
-
-		moveTo(0, newYPoints[0]);
-		for(var i = 1; i <= GRAPH_WIDTH; i++){
-			console.log("x: " + i + " y: " + newYPoints[i]);
-			ctx.lineTo(i, newYPoints[i]);
-			ctx.stroke();
-		}
-		this.ypoints = newYPoints;
-		/*moveTo(GRAPH_WIDTH, this.ypoints[GRAPH_WIDTH-1]);
-		temp = this.ypoints[GRAPH_WIDTH];
-		for(var i = GRAPH_WIDTH; i > 0; i--){
-			this.ypoints[i] = this.ypoints[i-1];
-			combinedCurve[i] = this.ypoints[i] + curvemainY[i] - GRAPH_HEIGHT/2;
-
-			if(i-2 >= 0){
-				ctx.lineTo(i-1, this.ypoints[i-2]);
-				ctx.stroke();
-			}
-			
-		}
-		this.ypoints[0] = temp;
-		combinedCurve[0] = this.ypoints[0] + curvemainY[0];
-
-		ctx.lineTo(0, temp);
-		ctx.stroke();*/
-
 	}
 	else{	
-		moveTo(0, this.ypoints[1]);
-		temp = this.ypoints[0];
-		for(var i = 0; i < GRAPH_WIDTH; i++){
-			this.ypoints[i] = this.ypoints[i+1];
-			combinedCurve[i] = this.ypoints[i] + curvemainY[i] - GRAPH_HEIGHT/2;
-
-			if(i+2 <= GRAPH_WIDTH){
-				ctx.lineTo(i+1, this.ypoints[i+2]);
-				ctx.stroke();
-			}
+		for(var i = 0; i <= GRAPH_WIDTH; i++){
+			newYPoints[((i-shiftAmount)+GRAPH_WIDTH) % GRAPH_WIDTH] = this.ypoints[i];
+			combinedCurve[((i-shiftAmount)+GRAPH_WIDTH) % GRAPH_WIDTH] = this.ypoints[i]+curvemainY[i] - GRAPH_HEIGHT/2;
 		}
-		this.ypoints[GRAPH_WIDTH] = temp;
-		combinedCurve[GRAPH_WIDTH] = this.ypoints[GRAPH_WIDTH] + curvemainY[GRAPH_WIDTH];
-
-		ctx.lineTo(GRAPH_WIDTH, temp);
-		ctx.stroke();
 	}
 
-	ctx.closePath();
+	this.ypoints = newYPoints;
 	return combinedCurve;
 }
 
@@ -149,9 +109,9 @@ function Graph(gridcolor, axiscolor){
 	this.renderGraph = function(){
 
 		// Draw the graph
-		for(var i = 0; i <= GRAPH_WIDTH; i++){
+		/*for(var i = 0; i <= GRAPH_WIDTH; i++){
 			
-		}
+		}*/
 
 	}
 	this.renderGraph();
@@ -179,6 +139,7 @@ function renderPlot(currDiv, plotNum){
 	$('#'+currChartId).css('width',GRAPH_WIDTH);
 	$('#'+currChartId).css('height',GRAPH_HEIGHT);
 	$('#'+currChartId).css('background-color', 'white');
+	$('#'+currChartId).css('border-radius', '5px');
 
 	// Next, define a context	
 	var c = document.getElementById(currChartId);
@@ -189,8 +150,8 @@ function renderPlot(currDiv, plotNum){
 	// Now, create + draw the appropriate curves!
 	var colors = ['#999999', '#139bdf', '#333333'];
 
-	var curveMain = new Curve(3, -GRAPH_HEIGHT/8, -10);
-	var curveFilter = new Curve(3, -GRAPH_HEIGHT/8, 0);
+	var curveMain = new Curve(3, -GRAPH_HEIGHT/8, 0);
+	var curveFilter = new Curve(3, GRAPH_HEIGHT/8, GRAPH_WIDTH/12);
 	var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
 	curveMain.draw(colors[0], curveMain.ypoints, ctx);
 	curveFilter.draw(colors[1], curveFilter.ypoints, ctx);
@@ -210,12 +171,13 @@ function renderPlot(currDiv, plotNum){
 
 	$('#'+sliderId).slider({slide : function(event, ui){
 			ctx.clearRect(0,0,GRAPH_WIDTH, GRAPH_HEIGHT);
-			combinedY = curveFilter.translateAndRedraw(ui.value - prevSliderVal, curveMain.ypoints, colors[1], ctx, 2);
+			combinedY = curveFilter.translateAndRedraw(ui.value - prevSliderVal, curveMain.ypoints, colors[1], ctx, 3);
 
 			curveResult.setYPoints(combinedY);
 
 			// Redraw curves
 			curveMain.draw(colors[0], curveMain.ypoints, ctx);
+			curveFilter.draw(colors[1], curveFilter.ypoints, ctx);
 			curveResult.draw(colors[2], curveResult.ypoints, ctx);
 
 			// Redraw graph
