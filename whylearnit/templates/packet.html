@@ -63,7 +63,6 @@
 
           $('.tooltip').tooltip();
           $('.exercise').hide();
-          console.log($('.exercise'));
           $('#exercise-1').show();
         }
       };
@@ -129,7 +128,6 @@
 </head>
 <body>
   {% include exercise_template_path %}
-  <div class="container-fluid">
   <div id="top-bar" class="">
     <p id="logo" class="">whylearn.it?</p>
     <div id="top-bar-buttons">
@@ -137,6 +135,7 @@
       <div id="about" class="top-bar-button"><a href="/about/">about</a></div>
     </div>
   </div>
+  <div class="container">
   <div id="sidebar" class="well">
     <ul class="nav nav-list">
       <li class="nav-header">
@@ -153,7 +152,7 @@
       </li>
     </ul>
   </div>
-  <div id="main" class="span10 offset3">
+  <div id="main" class="span10 offset2" >
     <div id="video-watch"> 
       {% tplhandlebars "video-tpl" %}
       <div id="video-title">{{title}}</div>
@@ -185,8 +184,10 @@
             {{#if choices}}
             <div class="btn-group" data-toggle="buttons-radio">
               {{#each choices}}
-              <button class="btn" onclick="WhyLearnIt.selection('{{../exid}}',
-                '{{this}}')">{{this}}</button>
+              <button class="btn" onclick="(function() {
+                WhyLearnIt.selection('{{../exid}}', '{{this}}');
+                goToEx({{../exid}}, {{../exid}} + 1);
+                })()">{{this}}</button>
               {{/each}}
             </div>
             {{else}}
