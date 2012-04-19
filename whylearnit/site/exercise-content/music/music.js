@@ -10,24 +10,30 @@
 {% extends "packet.js" %}
 
 {% block extra %}
+google.load('visualization', '1.0', {'packages':['corechart']});
 
-// Dimensions in pixels			
-var GRAPH_WIDTH = 500;
-var GRAPH_HEIGHT = 300;
-var ONE_EQUIV = GRAPH_HEIGHT/8;
+// CONSTANTS
+/*var GRAPH_WIDTH = 500;
+va GRAPH_HEIGHT = 300;*/
+var CHART_WIDTH = 600;
+var CHART_HEIGHT = 400;
+var NUM_POINTS = 200;
+var GRID_INCREMENT = 2*Math.PI / NUM_POINTS;
+/*var ONE_EQUIV = GRAPH_HEIGHT/8;
+var PIX_STEP = 4;*/
+var TRANSLATE_STEP = 1;
 
 function Curve(frequency, amplitude, xshift){		
 
 	this.frequency = frequency;
 	this.amplitude = amplitude;
 	this.xshift = xshift;
-	this.gridIncrement = 2*Math.PI / GRAPH_WIDTH;
 
 	this.initializePoints = function(){
 		this.ypoints = [];
 
-		for(var i = 0; i <= GRAPH_WIDTH; i++){
-			this.ypoints[i] = GRAPH_HEIGHT/2 + this.amplitude*Math.sin((i*this.frequency+xshift)*this.gridIncrement);
+		for(var i = 0; i <= NUM_POINTS; i++){
+			this.ypoints[i] = this.amplitude*Math.sin((i*this.frequency+xshift)*GRID_INCREMENT);
 		}
 	}
 	this.initializePoints();
@@ -44,13 +50,13 @@ function CombinedCurve(allCurves){
 
 	this.initializePoints = function(){
 
-		for(var j = 0; j <= GRAPH_WIDTH; j++){
-			this.ypoints[j] = GRAPH_HEIGHT/2;
+		for(var j = 0; j <= NUM_POINTS; j++){
+			this.ypoints[j] = 0;
 		}
 
 		for(var i = 0; i < allCurves.length; i++){
-			for(var j=0; j <= GRAPH_WIDTH; j++){
-				this.ypoints[j] += allCurves[i][j] - GRAPH_HEIGHT/2;
+			for(var j=0; j <= NUM_POINTS; j++){
+				this.ypoints[j] += allCurves[i][j];
 			}
 		}
 
@@ -62,41 +68,34 @@ function CombinedCurve(allCurves){
 // This function is responsible for:
 // 1.  Determining the new points for the "filter" curve
 // 2.  Computing the new "combined curve" as a result
-Curve.prototype.translateAndRedraw = function(deltax, curvemainY, filterColor, ctx, shiftAmount){
+Curve.prototype.translateAndRecompute = function(curvemainY, combinedCurve, shiftAmount){
 
 	var	newYPoints = [];
-	var combinedCurve = [];
-	this.xshift = this.xshift + shiftAmount*deltax;
+	this.xshift = this.xshift + shiftAmount;
 
-	if(deltax > 0){
-		for(var i = GRAPH_WIDTH; i >= 0; i--){
-			newYPoints[(i+shiftAmount) % GRAPH_WIDTH] = this.ypoints[i];
-			combinedCurve[(i+shiftAmount) % GRAPH_WIDTH] = this.ypoints[i]+curvemainY[i] - GRAPH_HEIGHT/2;
+	if(shiftAmount > 0){
+
+		var temp = this.ypoints[NUM_POINTS];
+		for(var i = NUM_POINTS; i > 0; i--){
+			newYPoints[i] = this.ypoints[i-1];
+			combinedCurve.ypoints[i] = newYPoints[i]+curvemainY.ypoints[i-1];
 		}
+		newYPoints[0] = temp;
+		combinedCurve.ypoints[0] = newYPoints[0]+curvemainY.ypoints[0];
 	}
-	else{	
-		for(var i = 0; i <= GRAPH_WIDTH; i++){
-			newYPoints[((i-shiftAmount)+GRAPH_WIDTH) % GRAPH_WIDTH] = this.ypoints[i];
-			combinedCurve[((i-shiftAmount)+GRAPH_WIDTH) % GRAPH_WIDTH] = this.ypoints[i]+curvemainY[i] - GRAPH_HEIGHT/2;
+	else{
+
+		var temp = this.ypoints[0];
+		for(var i = 0; i < NUM_POINTS; i++){
+			newYPoints[i] = this.ypoints[i+1];
+			combinedCurve.ypoints[i] = newYPoints[i]+curvemainY.ypoints[i+1];
 		}
+		newYPoints[NUM_POINTS] = temp;
+		combinedCurve.ypoints[NUM_POINTS] = newYPoints[NUM_POINTS]+curvemainY.ypoints[NUM_POINTS];
 	}
 
 	this.ypoints = newYPoints;
 	return combinedCurve;
-}
-
-Curve.prototype.draw = function(color, ypoints, ctx){
-
-	ctx.strokeStyle = color;
-	ctx.beginPath();				
-	ctx.moveTo(i,ypoints[0]);
-	ctx.stroke();
-	for(var i=1; i <= GRAPH_WIDTH; i++){
-		ctx.lineTo(i,ypoints[i]);
-		//console.log('X=' + i + ' Y=' + this.ypoints[i]);
-		ctx.stroke();
-	}
-	ctx.closePath();
 }
 
 Curve.prototype.printFunction = function(){
@@ -112,138 +111,80 @@ CombinedCurve.prototype.draw = function(color, ypoints, ctx){
 	Curve.prototype.draw(color, ypoints, ctx);
 }
 
-CombinedCurve.prototype.setYPoints = function(ypoints){
-	this.ypoints = ypoints;
-}
-
-function Graph(gridcolor, stepx, stepy){
-
-	this.gridcolor = gridcolor;
-	this.stepx = stepx;
-	this.stepy = stepy;
-
-	this.renderGraph = function(ctx, eps){
-
-		ctx.strokeStyle = this.gridcolor;
-
-		// Draw the vertical grid lines
-		for(var i = 0; i <= GRAPH_WIDTH; i+=this.stepx){
-			ctx.moveTo(i, GRAPH_HEIGHT/2 - eps);
-			ctx.lineTo(i, GRAPH_HEIGHT/2 + eps);
-			ctx.stroke();
-
-			var xVal = i/this.stepx;
-			console.log(xVal);
-			if(xVal % 4 == 0){
-				ctx.fillStyle = '#000';
-				ctx.fillText('yo', i, GRAPH_HEIGHT/2 + 2*eps);
-			}
-		}
-
-		// Draw the horizontal grid lines
-		var maxMarks = GRAPH_HEIGHT/(this.stepy*2);
-		for(var i = 0; i <= GRAPH_HEIGHT; i+=this.stepy){
-			ctx.moveTo(eps,i);
-			ctx.lineTo(-eps, i);
-			ctx.stroke();
-
-			ctx.fillStyle = '#000';
-			ctx.fillText(''+(maxMarks - i/this.stepy), 2*eps, i+eps);
-		}
-
-		// Draw horizontal axis
-		ctx.moveTo(0, GRAPH_HEIGHT/2);
-		ctx.lineTo(GRAPH_WIDTH, GRAPH_HEIGHT/2);
-		ctx.stroke();
-
-		// Draw in legend values
-
-	}
-
-	this.drawLegend = function(colors, titles, ctx){
-
-		var boxWidth = 20;
-		var boxHeight = 10;
-		var eps = 5;
-		for(var i = 0; i < colors.length; i++){
-			ctx.beginPath();
-			ctx.strokeStyle = colors[i];
-			ctx.rect(GRAPH_WIDTH - GRAPH_WIDTH/4, (i+1)*GRAPH_HEIGHT/30 + i*eps, boxWidth, boxHeight);
-			ctx.fillStyle = colors[i];
-			ctx.fill();
-
-			ctx.fillStyle = '#000';
-			ctx.fillText(titles[i], GRAPH_WIDTH - GRAPH_WIDTH/4 + boxWidth + eps, (i+1)*GRAPH_HEIGHT/30 + i*eps + boxHeight/2 + eps);
-			
-		}
-		
-	}
-	
-}
-
-/* Responsible for rendering plots for each exercise*/
-function renderPlot(currDiv, plotNum, curves, graph, colors){
-	
-	// First, put a canvas in the div identified by currDiv
-	var currChartId = 'chart-'+parseFloat(plotNum);
-	$('#'+currDiv).append('<canvas id="' + currChartId + '"></canvas>');
-
-	$('#'+currChartId).css('width',GRAPH_WIDTH);
-	$('#'+currChartId).css('height',GRAPH_HEIGHT);
-	$('#'+currChartId).css('background-color', 'white');
-	$('#'+currChartId).css('border-radius', '5px');
-
-	// Next, define a context	
-	var c = document.getElementById(currChartId);
-	var ctx = c.getContext('2d');
-	ctx.canvas.width = GRAPH_WIDTH;
-	ctx.canvas.height = GRAPH_HEIGHT;
+/******************* RENDER FUNCTION ************************/
+function renderPlot(currDiv, plotNum, curves, title, colors){
 
 	// Create the grid for the graph + draw!
 	curveLabels = ['Main Song', 'Filter Song', 'Resulting Song'];
-	var eps = 5;
-	graph.drawLegend(colors, curveLabels, ctx, curveMain, curveFilter);
-	graph.renderGraph(ctx, eps);
 
-	// Plot the curves!
-	var curveMain = curves[0];
-	var curveFilter = curves[1];
-	var curveResult = curves[2];
-	curveMain.draw(colors[0], curveMain.ypoints, ctx);
-	curveFilter.draw(colors[1], curveFilter.ypoints, ctx);
-	curveResult.draw(colors[2], curveResult.ypoints, ctx);
+	/***** ADD IN GOOGLE CHART! *****/
+	var data = new google.visualization.DataTable();
+
+    // Add column for days
+    data.addColumn('string', 'values');
+	
+	for(c in curveLabels){
+		data.addColumn('number', curveLabels[c]);
+	}
+
+	for(var i = 0; i < NUM_POINTS; i++){
+	
+		var rowArray = [];
+		rowArray.push(''+(i*GRID_INCREMENT.toFixed(2)));
+
+		for(var j = 0; j < curves.length; j++){
+			rowArray.push(curves[j].ypoints[i]);
+		}
+
+		data.addRow(rowArray);
+	}
+
+    // Now, define options
+    var options = {
+	  width : CHART_WIDTH,
+	  height: CHART_HEIGHT,
+	  vAxis: {title : 'Y-values', minValue : -3, maxValue : 3},
+	  hAxis: {title: 'X-values (in radians)'},
+	  seriesType: 'line',
+	  title: title,
+	  colors: colors
+    }
+
+    var chart = new google.visualization.LineChart(document.getElementById(currDiv));
+    chart.draw(data, options);
+	
+
+	/***** END ADD IN GOOGLE CHART! *****/	
+
+	//ctx.translate(0.5,0.5);
 
 	// Lastly, set up the slider and bind callback to be triggered when using the slider!
 	var sliderId = 'slider-'+parseFloat(plotNum);
 	$('#'+currDiv).append('<div id="' + sliderId + '"></div>');
-	console.log($('#'+currDiv).html());
+	$('#'+sliderId).css('width',CHART_WIDTH);
 
 	var prevSliderVal = 0;
 
 	$('#'+sliderId).slider({slide : function(event, ui){
-			ctx.clearRect(0,0,GRAPH_WIDTH, GRAPH_HEIGHT);
-			combinedY = curveFilter.translateAndRedraw(ui.value - prevSliderVal, curveMain.ypoints, colors[1], ctx, 3);
-
-			curveResult.setYPoints(combinedY);
-
-			// Redraw graph
-			graph.drawLegend(colors, curveLabels, ctx, curves);
-			graph.renderGraph(ctx, eps);
-		
-			// Redraw curves
-			curveMain.draw(colors[0], curveMain.ypoints, ctx);
-			curveFilter.draw(colors[1], curveFilter.ypoints, ctx);
-			curveResult.draw(colors[2], curveResult.ypoints, ctx);
-
+			curves[1].translateAndRecompute(curves[0],curves[2],(ui.value - prevSliderVal)*TRANSLATE_STEP);
+			updatePointsAndRedraw(curves, data, chart, options);
 			prevSliderVal = ui.value;
-			console.log(curveFilter.printFunction());
-		}, 
-		animate : true
+		}
 	});
 
-	// CSS for slider
-	$('#'+sliderId).css('width',GRAPH_WIDTH);
+}
 
+function updatePointsAndRedraw(curves, data, chart, options){
+
+	for(var i = 0; i < NUM_POINTS; i++){
+
+		// No need to add in the main curve again!
+		for(var j = 1; j < curves.length; j++){
+			data.setValue(i, j+1, curves[j].ypoints[i]);
+		}
+	}
+
+	chart.draw(data, options);
 }
 
 {% endblock extra %}
@@ -254,25 +195,25 @@ function renderPlot(currDiv, plotNum, curves, graph, colors){
 
 		// Now, create + draw the appropriate curves!
 		var colors = ['#999999', '#139bdf', '#333333'];
-		var graph = new Graph('#000', GRAPH_WIDTH/16, GRAPH_HEIGHT/8);
+		var title = 'Two waves with same frequency added to obtain a resulting wave';
 
-		var curveMain = new Curve(4, -GRAPH_HEIGHT/8, 0);
-		var curveFilter = new Curve(4, GRAPH_HEIGHT/8, GRAPH_WIDTH/4);
+		var curveMain = new Curve(2, 1, 0);
+		var curveFilter = new Curve(2, 1, NUM_POINTS/6);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
 
-		renderPlot(this.attr('id'), 1, [curveMain, curveFilter, curveResult], graph, colors);
+		renderPlot(this.attr('id'), 1, [curveMain, curveFilter, curveResult], title, colors);
 	},
 
 	function (){
 		// Now, create + draw the appropriate curves!
 		var colors = ['#999999', '#139bdf', '#333333'];
-		var graph = new Graph('#000', GRAPH_WIDTH/16, GRAPH_HEIGHT/8);
+		var title = 'Two waves with different frequencies added to obtain a resulting wave'
 										
-		var curveMain = new Curve(3, -GRAPH_HEIGHT/8, 0);
-		var curveFilter = new Curve(2, GRAPH_HEIGHT/8, GRAPH_WIDTH/2);
+		var curveMain = new Curve(3, -1, 0);
+		var curveFilter = new Curve(2, 1, 10);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
 
-		renderPlot(this.attr('id'), 2, [curveMain, curveFilter, curveResult], graph, colors);
+		renderPlot(this.attr('id'), 2, [curveMain, curveFilter, curveResult], title, colors);
 	}
 ]
 
