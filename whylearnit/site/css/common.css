@@ -232,12 +232,12 @@ body{
   margin-bottom: 15px;
 }
 
-.next-button {
+#ex-buttons {
   float: right;
   margin-bottom: 10px;
 }
 
-.exercise > .visual {
+.exercise.visual {
   margin-left: auto;
   margin-right: auto;
 }
