@@ -17,16 +17,19 @@ videogames.js
 		this.append($("#videogames-visual-2").html());
 	},
 	function (data){
-		
+		this.append($("#videogames-visual-3").html());
 	},
 	function (data){
-		
+		this.append($("#videogames-visual-4").html());
 	},
 	function (data){
-		
+		this.append($("#videogames-visual-5").html());
 	},
 	function (data){
-
+		this.append($("#videogames-visual-6").html());
+	},
+	function (data){
+		this.append($("#videogames-visual-7").html());
 	}
 ];
 {% endblock visuals %}
@@ -34,6 +37,7 @@ videogames.js
 
 {% block packet_mods %}
 
+packet.video = 'Yo4YY8xRUAs'
 packet.description = $('#videogames-description').html();
 
 packet.exercises = [];
