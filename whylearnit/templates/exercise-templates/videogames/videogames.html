@@ -322,8 +322,18 @@ var setupFalseGravity = function(){
 		render(state);
 		state.timestep++;
 	}
-	$('#videogames-visual-1-run').click(function(){
+	$('#videogames-visual-1-run').one('click', function(){
 		setInterval(physics, 50);
+		$(this).click(function(){
+			if (state.mode == 'real'){
+				state.character.fy = 0.1;
+				state.character.vy = -5;
+			}else if (state.mode == 'linear'){
+				state.character.fy = 0;
+				state.character.vy = -3;
+				setTimeout(function(){ state.character.vy = 3; }, 2000);
+			}
+		});
 	});
 };
 var setupRealGravity = function(){
@@ -405,8 +415,18 @@ var setupRealGravity = function(){
 		render(state);
 		state.timestep++;
 	}
-	$('#videogames-visual-2-run').click(function(){
+	$('#videogames-visual-2-run').one('click', function(){
 		setInterval(physics, 50);
+		$(this).click(function(){
+			if (state.mode == 'real'){
+				state.character.fy = 0.1;
+				state.character.vy = -5;
+			}else if (state.mode == 'linear'){
+				state.character.fy = 0;
+				state.character.vy = -3;
+				setTimeout(function(){ state.character.vy = 3; }, 2000);
+			}
+		});
 	});
 };
 
