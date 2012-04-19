@@ -12,9 +12,11 @@ videogames.js
 	function (data) {
 		//visualization resize hooks
 		this.append($("#videogames-visual-1").html());
+		setupFalseGravity();
 	},
 	function (data){
 		this.append($("#videogames-visual-2").html());
+		setupRealGravity();
 	},
 	function (data){
 		this.append($("#videogames-visual-3").html());
@@ -30,6 +32,10 @@ videogames.js
 	},
 	function (data){
 		this.append($("#videogames-visual-7").html());
+		initBall();
+		initSpaceship();
+		initFabric();
+		initParticles();
 	}
 ];
 {% endblock visuals %}
