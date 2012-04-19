@@ -612,7 +612,7 @@ var setupRealGravity = function(){
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-visual-7" %}
-
+<h2>Single body</h2>
 <div id="spaceship">
 	<canvas id="spaceship-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
 	<br />
@@ -627,6 +627,8 @@ var setupRealGravity = function(){
 	<br />
 	<b>Current:</b> <span id="spaceship-current-state"></span>
 </div>
+<p>Press to apply a force in any direction. The ship points in the direction of its velocity.</p>
+
 <div id="frictionball">
 	<canvas id="frictionball-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
 	<br />
@@ -638,7 +640,9 @@ var setupRealGravity = function(){
 	<br />
 	Friction: <input type="range" id="frictionball-friction-slider" value="20" />
 </div>
+<p>Friction is a little bit tricky: the friction force increases with how fast the ball is moving, so the force applied to the ball increases as it goes faster, and goes down to zero as it stops.</p>
 
+<h2>Multi-body systems</h2>
 <div id="particles">
 	<canvas id="particles-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
 	<br />
@@ -648,12 +652,14 @@ var setupRealGravity = function(){
 	<br />
 	Sideways velocity: <input type="range" id="particles-horizontal-velocity-slider" value="2" min="-4" max="4" />
 </div>
+<p>You can also make fun, pretty things by playing with the numbers. This is a demonstration of a particle system.</p>
+
 <div id="fabric">
 	<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
 	<br />
 	<input id="fabric-start" class="button" type="button" value="Start" />
 </div>
-
+<p>This is 100 different bodies with lines drawn between them. Each connected body applies force to the body at the other end of the connection in proportion to the difference between the spring's "ideal" length and its current length. Gravity also pulls all of the nodes down. In addition two points are anchored (don't move regardless of the forces applied to them.)</p>
 {% endtplhandlebars %}
 
 
