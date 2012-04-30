@@ -35,7 +35,6 @@ WhyLearnIt.packetLoaded((function(){
           } {% if not forloop.last %}, {% endif %}
       {% endfor %} ]
     {% endblock load_exercises %}
-
     // individual packets can overwrite this info/extend it, but 
     // this is probably never necessary 
   var packet = 

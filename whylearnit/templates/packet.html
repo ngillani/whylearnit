@@ -22,6 +22,14 @@
     <script type="text/javascript" src="/site/js/bootstrap-dropdown.js"></script>
     {% handlebars_js %}
 
+	<!--Load SoundManager for now ... TODO: Remove later! -->
+	<script type="text/javascript" src="/site/lib/soundmanager/script/soundmanager2-jsmin.js"></script>
+	<script> 
+		soundManager.url = '/site/lib/soundmanager/swf/';
+		soundManager.flashVersion = 9;
+		soundManager.useFlashBlock = false;
+	</script>
+
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script>
