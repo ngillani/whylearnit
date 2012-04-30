@@ -11,14 +11,15 @@
 
 {% block extra %}
 
-// SOUNDMANAGER SETUP
-SONG_DIR = '/site/exercise-content/music/mp3files/';
-SONG_EXT = '.mp3';
-
-function playSingleTone(soundObject){
-	soundObject.play();
-
-}
+// CONSTANTS
+var SONG_DIR = '/site/exercise-content/music/mp3files/';
+var SONG_EXT = '.mp3';
+var CHART_WIDTH = 600;
+var CHART_HEIGHT = 400;
+var NUM_POINTS = 200;
+var GRID_INCREMENT = 2*Math.PI / NUM_POINTS;
+var BUTTON_WIDTH = CHART_WIDTH / 10;
+var TRANSLATE_STEP = 1;
 
 function playTone(songName1, songName2, delay){
 
@@ -34,27 +35,19 @@ function playTone(songName1, songName2, delay){
 		url: SONG_DIR + songName1 + SONG_EXT,
 		autoLoad: true,	
 		onplay: function(){
-				setTimeout(function(){playSingleTone(mySoundObject2)}, delay);
+				setTimeout(function(){mySoundObject2.play()}, delay);
 			},
+		onfinish: function(){
+				
+		},
 	});
 
 	mySoundObject1.play();
 	
 }
 
-google.load('visualization', '1.0', {'packages':['corechart']});
-
-// CONSTANTS
-/*var GRAPH_WIDTH = 500;
-va GRAPH_HEIGHT = 300;*/
-var CHART_WIDTH = 600;
-var CHART_HEIGHT = 400;
-var NUM_POINTS = 200;
-var GRID_INCREMENT = 2*Math.PI / NUM_POINTS;
-var BUTTON_WIDTH = CHART_WIDTH / 10;
-/*var ONE_EQUIV = GRAPH_HEIGHT/8;
-var PIX_STEP = 4;*/
-var TRANSLATE_STEP = 1;
+// Load Google Viz
+//google.load('visualization', '1.0', {'packages':['corechart']});
 
 function Curve(frequency, amplitude, xshift){		
 
@@ -227,7 +220,7 @@ function renderPlot(currDiv, plotNum, curves, origCurves, title, colors){
 	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
 
 	$('#'+playButtonId).click(function(){
-		playTone('440Hz-5sec', '1000Hz-5sec', 10);		
+		playTone('200Hz-5sec', '100Hz-5sec2', 100);		
 	});
 	
 
