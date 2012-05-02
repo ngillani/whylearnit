@@ -22,6 +22,15 @@
     <script type="text/javascript" src="/site/js/bootstrap-dropdown.js"></script>
     {% handlebars_js %}
 
+	<!--Load SoundManager here for now ... TODO: Lazy load this! -->
+	<script type="text/javascript" src="/site/lib/soundmanager/script/soundmanager2-jsmin.js"></script>
+	<script> 
+		soundManager.url = '/site/lib/soundmanager/swf/';
+		soundManager.flashVersion = 9;
+		soundManager.useFlashBlock = false;
+		soundManager.useFastPolling = true;
+	</script>
+
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script>
@@ -76,6 +85,7 @@
         document.body.appendChild(inject);
         setTimeout(scrollStick, 500);
       }
+
       /*
       //TODO:  Don't hardcode the js file
       $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
@@ -125,6 +135,7 @@
       $(window).on('scroll', handler);
       handler();
     }
+
   </script>
 
 </head>
@@ -157,6 +168,9 @@
       </li>
     </ul>
   </div>
+
+
+
   <div id="main" class="span10 offset3">
     <div id="video-watch"> 
       {% tplhandlebars "video-tpl" %}
@@ -198,7 +212,7 @@
             {{/if}}
           </div>
           <div class="next-button btn-group">
-            <button type="button" class="btn btn-primary"
+            <button type="button" class="btn btn-primary btn-main"
               onclick="goToEx({{exid}}, {{exid}} + 1);">Next Step</button>
             <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
               <span class="caret"></span>
