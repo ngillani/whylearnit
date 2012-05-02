@@ -47,6 +47,7 @@ def packet(request, folder, packet):
 
 '''
 def getPacketJS(request, folder, packet):
+
         # note packet will probably switch from 'videogame.js' to a number, i.e.
         # replacing packetId. URL routing should be updated
         url = 'exercise-content/' + folder + '/' + packet + '.js';

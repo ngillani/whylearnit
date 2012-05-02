@@ -10,18 +10,44 @@
 {% extends "packet.js" %}
 
 {% block extra %}
-google.load('visualization', '1.0', {'packages':['corechart']});
 
 // CONSTANTS
-/*var GRAPH_WIDTH = 500;
-va GRAPH_HEIGHT = 300;*/
+var SONG_DIR = '/site/exercise-content/music/mp3files/';
+var SONG_EXT = '.mp3';
 var CHART_WIDTH = 600;
 var CHART_HEIGHT = 400;
 var NUM_POINTS = 200;
 var GRID_INCREMENT = 2*Math.PI / NUM_POINTS;
-/*var ONE_EQUIV = GRAPH_HEIGHT/8;
-var PIX_STEP = 4;*/
+var BUTTON_WIDTH = CHART_WIDTH / 10;
 var TRANSLATE_STEP = 1;
+
+function playTone(songName1, songName2, delay){
+
+	var mySoundObject2 = soundManager.createSound({
+		id: songName2, 
+		url: SONG_DIR + songName2 + SONG_EXT,	
+		autoPlay: false,
+		autoLoad: true,
+	});
+
+	var mySoundObject1 = soundManager.createSound({
+		 id: songName1,
+		url: SONG_DIR + songName1 + SONG_EXT,
+		autoLoad: true,	
+		onplay: function(){
+				setTimeout(function(){mySoundObject2.play()}, delay);
+			},
+		onfinish: function(){
+				
+		},
+	});
+
+	mySoundObject1.play();
+	
+}
+
+// Load Google Viz
+//google.load('visualization', '1.0', {'packages':['corechart']});
 
 function Curve(frequency, amplitude, xshift){		
 
@@ -112,10 +138,10 @@ CombinedCurve.prototype.draw = function(color, ypoints, ctx){
 }
 
 /******************* RENDER FUNCTION ************************/
-function renderPlot(currDiv, plotNum, curves, title, colors){
+function renderPlot(currDiv, plotNum, curves, origCurves, title, colors){
 
 	// Create the grid for the graph + draw!
-	curveLabels = ['Main Song', 'Filter Song', 'Resulting Song'];
+	curveLabels = ['Original Song', 'Filter Song', 'Resulting Song'];
 
 	/***** ADD IN GOOGLE CHART! *****/
 	var data = new google.visualization.DataTable();
@@ -147,7 +173,8 @@ function renderPlot(currDiv, plotNum, curves, title, colors){
 	  hAxis: {title: 'X-values (in radians)'},
 	  seriesType: 'line',
 	  title: title,
-	  colors: colors
+	  colors: colors,
+	  series: {2: {lineWidth: 5}},
     }
 
     var chart = new google.visualization.LineChart(document.getElementById(currDiv));
@@ -158,10 +185,14 @@ function renderPlot(currDiv, plotNum, curves, title, colors){
 
 	//ctx.translate(0.5,0.5);
 
-	// Lastly, set up the slider and bind callback to be triggered when using the slider!
+	// Lastly, set up the slider and reset button and bind callback to be triggered when using the slider!
+	var controlDiv = currDiv + '-control-'+parseFloat(plotNum);
 	var sliderId = 'slider-'+parseFloat(plotNum);
-	$('#'+currDiv).append('<div id="' + sliderId + '"></div>');
-	$('#'+sliderId).css('width',CHART_WIDTH);
+	$('#'+currDiv).append('<div id="' + controlDiv + '"></div>');
+	$('#'+controlDiv).css('width', CHART_WIDTH, 'display', 'inline');
+
+	$('#'+controlDiv).append('<div id="' + sliderId + '"></div>');
+	$('#'+sliderId).css('width',CHART_WIDTH, 'float', 'left');
 
 	var prevSliderVal = 0;
 
@@ -169,9 +200,39 @@ function renderPlot(currDiv, plotNum, curves, title, colors){
 			curves[1].translateAndRecompute(curves[0],curves[2],(ui.value - prevSliderVal)*TRANSLATE_STEP);
 			updatePointsAndRedraw(curves, data, chart, options);
 			prevSliderVal = ui.value;
-		}
+		}, 
 	});
 
+	var resetButtonId = 'reset-'+parseFloat(plotNum);
+	$('#'+controlDiv).append('<input id="' + resetButtonId + '" class="btn" type="button" value="Reset"/>');
+	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
+
+	$('#'+resetButtonId).click(function(){
+		resetCurveDataToOriginal(curves, origCurves);
+		updatePointsAndRedraw(curves, data, chart, options);
+		$('#'+sliderId).slider('option', 'value', 0);
+		
+	});
+
+	// Sandbox for done playing button
+	var playButtonId = 'play-'+parseFloat(plotNum);
+	$('#'+controlDiv).append('<input id="' + playButtonId + '" class="btn" type="button" value="Play!"/>');
+	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
+
+	$('#'+playButtonId).click(function(){
+		playTone('200Hz-5sec', '100Hz-5sec2', 100);		
+	});
+	
+
+}
+
+function resetCurveDataToOriginal(curves, origCurves){
+	
+	for(var i = 0; i < curves.length; i++){
+		for(var j=0; j <= NUM_POINTS; j++){
+			curves[i].ypoints[j] = origCurves[i].ypoints[j];
+		}
+	}
 }
 
 function updatePointsAndRedraw(curves, data, chart, options){
@@ -185,6 +246,16 @@ function updatePointsAndRedraw(curves, data, chart, options){
 	}
 
 	chart.draw(data, options);
+}
+
+function buildOriginalCurves(f1, a1, s1, f2, a2, s2){
+
+	// Store the original curve points to enable resetting
+	var origCurveMain = new Curve(f1, a1, s1);
+	var origCurveFilter = new Curve(f2, a2, s2);
+	var origCurveResult = new CombinedCurve([origCurveMain.ypoints, origCurveFilter.ypoints]);
+	return [origCurveMain, origCurveFilter, origCurveResult];
+
 }
 
 {% endblock extra %}
@@ -201,8 +272,24 @@ function updatePointsAndRedraw(curves, data, chart, options){
 		var curveFilter = new Curve(2, 1, NUM_POINTS/6);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
 
-		renderPlot(this.attr('id'), 1, [curveMain, curveFilter, curveResult], title, colors);
+		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
+
+		renderPlot(this.attr('id'), 1, [curveMain, curveFilter, curveResult], origCurves, title, colors);
 	},
+
+	function (){
+		// Now, create + draw the appropriate curves!
+		var colors = ['#999999', '#139bdf', '#333333'];
+		var title = 'Two waves with different frequencies added to obtain a resulting wave'
+										
+		var curveMain = new Curve(3, -1, 0);
+		var curveFilter = new Curve(10, 1, 10);
+		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
+
+		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
+
+		renderPlot(this.attr('id'), 2, [curveMain, curveFilter, curveResult], origCurves, title, colors);
+	}, 
 
 	function (){
 		// Now, create + draw the appropriate curves!
@@ -213,7 +300,9 @@ function updatePointsAndRedraw(curves, data, chart, options){
 		var curveFilter = new Curve(2, 1, 10);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
 
-		renderPlot(this.attr('id'), 2, [curveMain, curveFilter, curveResult], title, colors);
+		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
+
+		renderPlot(this.attr('id'), 3, [curveMain, curveFilter, curveResult], origCurves, title, colors);
 	}
 ]
 

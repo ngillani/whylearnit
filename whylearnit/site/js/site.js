@@ -19,6 +19,9 @@ function goToEx(currId, nextId) {
         if (nextId > numQuestions) {
           console.log("100");
           var percent = 100;
+
+		  openPrintPage();
+
         }
         else {
           for (var i = currId; i < nextId; ++i) {
@@ -31,7 +34,20 @@ function goToEx(currId, nextId) {
             scrollTop: $('#exercise-' + nextId).offset().top - 158
           }, 1000);
           var percent = (nextId - 1)* 100 / numQuestions; 
+
+		  // If we are on the last question, change the button text appropriately
+		  if(nextId == numQuestions){
+		    $(".btn-main", "#exercise-" + nextId).html("Finish and Print");
+
+		    // TODO:  Add email button?
+		  }
         }
 
         $('#exercises-progress > .bar').width( percent + '%');
+}
+
+function openPrintPage(){
+
+	  // TODO:  Build formatted print page, open new tab, open print dialog
+	  window.open("", "_newtab");
 }
