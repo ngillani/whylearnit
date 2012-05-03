@@ -1,7 +1,5 @@
 {% load templatetag_handlebars %}
 
-<!-- page content (scripts, styles) used in the templates can go here -->
-
 <script>
 function Body(x, y, vx, vy, ax, ay){
 	this.reset = function(){
@@ -631,7 +629,24 @@ var setupRealGravity = function(){
 <p>[4] What's a negative speed mean? If we subtract a negative number, the subtractions cancel out and we're adding. In this case 0 m - (-20 m/s * 1 second) = 20m</p>
 {% endtplhandlebars %}
 
-{% tplhandlebars "videogames-visual-7" %}
+
+
+{% tplhandlebars "videogames-description" %}
+<p>Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
+it look right on a computer.</p>
+
+<p>We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
+terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
+going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.</p>
+
+
+
+So all we had to do to simulate jumping after we had falling was change the initial acceleration! The rules didn't change at all.
+This setup is actually general enough to simulate physics on a single body! The only change we need to make is to understand everything
+in two directions instead of just one. When we were thinking about falling and jumping we were only thinking about the vertical position,
+but we also need to think about horizontal position if we want to simualate motion which isn't just up and down. So instead of height, we'll have
+position, consisting of an X and a Y coordinate. Similarly, speed is replaced by "velocity," which is the speed in the X and Y directions. Acceleration is still called acceleration, but we need to think of both X acceleration and Y acceleration.
+
 <h2>Single body</h2>
 <div id="spaceship">
 	<canvas id="spaceship-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
@@ -680,16 +695,7 @@ var setupRealGravity = function(){
 	<input id="fabric-start" class="button" type="button" value="Start" />
 </div>
 <p>This is 100 different bodies with lines drawn between them. Each connected body applies force to the body at the other end of the connection in proportion to the difference between the spring's "ideal" length and its current length. Gravity also pulls all of the nodes down. In addition two points are anchored (don't move regardless of the forces applied to them.)</p>
-{% endtplhandlebars %}
 
-
-{% tplhandlebars "videogames-description" %}
-<p>Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
-it look right on a computer.</p>
-
-<p>We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
-terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
-going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-1" %}
@@ -735,13 +741,4 @@ make a model to simulate pretty much anything with these three variables. Let's 
 it only happens for a moment: while you're pushing off the ground. Let's say the character jumps for 1 second giving them an acceleration
 of -20 m/s<sup>2</sup> for the first second (which means the jump itself is stronger than gravity, and then some). Let's say that gravity is 10 m/s<sup>2</sup>
 again so the numbers are a little bit easier to work with.
-{% endtplhandlebars %}
-
-
-{% tplhandlebars "videogames-exercises-7" %}
-So all we had to do to simulate jumping after we had falling was change the initial acceleration! The rules didn't change at all.
-This setup is actually general enough to simulate physics on a single body! The only change we need to make is to understand everything
-in two directions instead of just one. When we were thinking about falling and jumping we were only thinking about the vertical position,
-but we also need to think about horizontal position if we want to simualate motion which isn't just up and down. So instead of height, we'll have
-position, consisting of an X and a Y coordinate. Similarly, speed is replaced by "velocity," which is the speed in the X and Y directions. Acceleration is still called acceleration, but we need to think of both X acceleration and Y acceleration.
 {% endtplhandlebars %}
