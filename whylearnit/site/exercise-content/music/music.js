@@ -20,31 +20,33 @@ var NUM_POINTS = 200;
 var GRID_INCREMENT = 2*Math.PI / NUM_POINTS;
 var BUTTON_WIDTH = CHART_WIDTH / 10;
 var TRANSLATE_STEP = 1;
-var TONES = [];
+var TONES = ['200Hz-5sec', '200Hz-5sec2', '1000Hz-5sec'];
 
-var _mySoundObject1, _mySoundObject2;
+// Array of sound objects
+var _mySoundObjects = {};
 
-function loadTones(songs){
+(function(){
 
-	_mySoundObject1 = soundManager.createSound({
-		id: songs[0],
-		url: SONG_DIR + songs[0] + SONG_EXT,
-		autoLoad: true,	
-	    volume: 100,
-	});
+	for(var i = 0; i < TONES.length; i++){
 
-	_mySoundObject2 = soundManager.createSound({
-		id: songs[1], 
-		url: SONG_DIR + songs[1] + SONG_EXT,	
-		autoPlay: false,
-		autoLoad: true,
-	    volume: 100,
-	});
+		_mySoundObjects[TONES[i]] = soundManager.createSound({
+			id: TONES[i],
+			url: SONG_DIR + TONES[i] + SONG_EXT,
+			autoPlay: false,
+			autoLoad: true,	
+			volume: 100,
+		});
+
+	}
 	
+})();
+
+function playSingleTone(tone, delay){
+	_mySoundObjects[tone].play();
 }
 
-function playTones(delay){
-	_mySoundObject1.play({onplay: function(){setTimeout(_mySoundObject2.play(),delay);}});
+function playBothTones(tones, delay){
+	_mySoundObjects[tones[0]].play({onplay: function(){setTimeout(_mySoundObjects[tones[1]].play(),delay);}});
 }
 
 // Load Google Viz
@@ -64,10 +66,6 @@ function Curve(frequency, amplitude, xshift){
 		}
 	}
 	this.initializePoints();
-
-
-
-
 }
 
 function CombinedCurve(allCurves){
@@ -138,14 +136,8 @@ CombinedCurve.prototype.draw = function(color, ypoints, ctx){
 	Curve.prototype.draw(color, ypoints, ctx);
 }
 
-/******************* RENDER FUNCTION ************************/
+// Render the appropriate chart
 function renderPlot(currDiv, plotNum, curves, origCurves, title, colors, tones){
-
-	/***********Web Audio Sandbox*************/
-	var currSource = setupWebAudio();	
-
-	// Load in the songs
-	loadTones(tones);
 
 	// Create the grid for the graph + draw!
 	curveLabels = ['Original Song', 'Filter Song', 'Resulting Song'];
@@ -185,54 +177,9 @@ function renderPlot(currDiv, plotNum, curves, origCurves, title, colors, tones){
     }
 
     var chart = new google.visualization.LineChart(document.getElementById(currDiv));
-    chart.draw(data, options);
-	
+    chart.draw(data, options);	
 
-	/***** END ADD IN GOOGLE CHART! *****/	
-
-	//ctx.translate(0.5,0.5);
-
-	// Lastly, set up the slider and reset button and bind callback to be triggered when using the slider!
-	var controlDiv = currDiv + '-control-'+parseFloat(plotNum);
-	var sliderId = 'slider-'+parseFloat(plotNum);
-	$('#'+currDiv).append('<div id="' + controlDiv + '"></div>');
-	$('#'+controlDiv).css('width', CHART_WIDTH, 'display', 'inline');
-
-	$('#'+controlDiv).append('<div id="' + sliderId + '"></div>');
-	$('#'+sliderId).css('width',CHART_WIDTH, 'float', 'left');
-
-	var prevSliderVal = 0;
-
-	$('#'+sliderId).slider({slide : function(event, ui){
-			curves[1].translateAndRecompute(curves[0],curves[2],(ui.value - prevSliderVal)*TRANSLATE_STEP);
-			updatePointsAndRedraw(curves, data, chart, options);
-			prevSliderVal = ui.value;
-			//soundManager.stopAll();
-			//playTones(tones, 202.5);
-		}, 
-	});
-
-	var resetButtonId = 'reset-'+parseFloat(plotNum);
-	$('#'+controlDiv).append('<input id="' + resetButtonId + '" class="btn" type="button" value="Reset"/>');
-	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
-
-	$('#'+resetButtonId).click(function(){
-		resetCurveDataToOriginal(curves, origCurves);
-		updatePointsAndRedraw(curves, data, chart, options);
-		$('#'+sliderId).slider('option', 'value', 0);
-		
-	});
-
-	// Sandbox for done playing button
-	var playButtonId = 'play-'+parseFloat(plotNum);
-	$('#'+controlDiv).append('<input id="' + playButtonId + '" class="btn" type="button" value="Play!"/>');
-	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
-
-	$('#'+playButtonId).click(function(){
-		//playTones(tones, 0);		 
-		currSource.noteOn(0);
-	});
-	
+	return {data: data, chart: chart, options: options};
 
 }
 
@@ -268,55 +215,179 @@ function buildOriginalCurves(f1, a1, s1, f2, a2, s2){
 
 }
 
+function addResetButton(plotNum, controlDiv, curves, origCurves, chartInfo, sliderId){
+
+	var resetButtonId = 'reset-'+plotNum;
+	$('#'+controlDiv).append('<input id="' + resetButtonId + '" class="btn" type="button" value="Reset"/>');
+	$('#'+resetButtonId).css('width',BUTTON_WIDTH, 'float', 'right');
+
+	$('#'+resetButtonId).click(function(){
+		resetCurveDataToOriginal(curves, origCurves);
+		updatePointsAndRedraw(curves, chartInfo['data'], chartInfo['chart'], chartInfo['options']);
+		$('#'+sliderId).slider('option', 'value', 0);
+		
+	});
+
+}
+
+function addSlider(plotNum, controlDiv, curves, chartInfo){
+
+	var sliderId = 'slider-'+plotNum;
+
+	$('#'+controlDiv).append('<div id="' + sliderId + '"></div>');
+	$('#'+sliderId).css('width',CHART_WIDTH, 'float', 'left');
+
+	var prevSliderVal = 0;
+
+	$('#'+sliderId).slider({slide : function(event, ui){
+			curves[1].translateAndRecompute(curves[0],curves[2],(ui.value - prevSliderVal)*TRANSLATE_STEP);
+			updatePointsAndRedraw(curves, chartInfo['data'], chartInfo['chart'], chartInfo['options']);
+			prevSliderVal = ui.value;
+		}, 
+	});
+
+	return sliderId;
+
+}
+
+function addSoundButtons(plotNum, controlDiv, tones, delays){
+
+	// Create a play button for each type of song
+	var playMainSongButton = 'play-main-'+plotNum;
+	$('#'+controlDiv).append('<input id="' + playMainSongButton + '" class="btn" type="button" value="Play Main Song"/>');
+
+	var playFilterSongButton = 'play-filter-'+plotNum;
+	$('#'+controlDiv).append('<input id="' + playFilterSongButton + '" class="btn" type="button" value="Play Filter Song"/>');
+
+	var playResultSongButton = 'play-both-'+plotNum;
+	$('#'+controlDiv).append('<input id="' + playResultSongButton + '" class="btn" type="button" value="Play Result Song"/>');	
+
+	$('#'+playMainSongButton).click(function(){
+		playSingleTone(tones[0], delays[0]);		 
+	});
+
+	$('#'+playFilterSongButton).click(function(){
+		playSingleTone(tones[1], delays[1]);		 
+	});
+
+	$('#'+playResultSongButton).click(function(){
+		playBothTones(tones, delays[1]);		 
+	});
+
+}
+
+function buildControlUI(plotNum, currDiv){
+
+	var controlDiv = currDiv + '-control-'+plotNum;
+	$('#'+currDiv).append('<div id="' + controlDiv + '"></div>');
+	$('#'+controlDiv).css('width', CHART_WIDTH, 'display', 'inline');
+	
+	return controlDiv;
+}
+
 {% endblock extra %}
 
 {% block visuals %}
 [
 	function (){
 
-		// Now, create + draw the appropriate curves!
+		var plotNum = 1;
+
+		// Render the wave chart
 		var colors = ['#999999', '#139bdf', '#333333'];
 		var title = 'Two waves with same frequency added to obtain a resulting wave';
-		var tones = ['200Hz-5sec', '200Hz-5sec2'];
+		var delays = [0, -NUM_POINTS/6];
 
-		var curveMain = new Curve(2, 1, 0);
-		var curveFilter = new Curve(2, 1, NUM_POINTS/6);
+		var curveMain = new Curve(2, 1, delays[0]);
+		var curveFilter = new Curve(2, 1, delays[1]);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
+		var curves = [curveMain, curveFilter, curveResult];
 
 		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
 
-		renderPlot(this.attr('id'), 1, [curveMain, curveFilter, curveResult], origCurves, title, colors, tones);
+		renderPlot(this.attr('id'), plotNum, curves, origCurves, title, colors);
+
+		// Render play buttons for each song
+		var controlDiv = buildControlUI(plotNum, this.attr('id'));
+		addSoundButtons(plotNum, controlDiv, [TONES[0], TONES[1]], delays);
+		
+		
 	},
 
 	function (){
-		// Now, create + draw the appropriate curves!
+
+		var plotNum = 2;
+
+		// Render chart
 		var colors = ['#999999', '#139bdf', '#333333'];
 		var title = 'Two waves with different frequencies added to obtain a resulting wave'
-		var tones = ['200Hz-5sec', '200Hz-5sec2'];
+		var delays = [0, -NUM_POINTS/6];
 										
-		var curveMain = new Curve(2, -1, 0);
-		var curveFilter = new Curve(10, 1, 0);
+		var curveMain = new Curve(2, 1, delays[0]);
+		var curveFilter = new Curve(2, 1, delays[1]);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
+		var curves = [curveMain, curveFilter, curveResult];
 
 		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
 
-		renderPlot(this.attr('id'), 2, [curveMain, curveFilter, curveResult], origCurves, title, colors, tones);
+		var chartInfo = renderPlot(this.attr('id'), plotNum, curves, origCurves, title, colors);
+
+		// Render controlUI, reset button, slider
+		var controlDiv = buildControlUI(plotNum, this.attr('id'));
+		var sliderId = addSlider(plotNum, controlDiv, curves, chartInfo);
+		addResetButton(plotNum, controlDiv, curves, origCurves, chartInfo, sliderId);
 	}, 
 
 	function (){
-		// Now, create + draw the appropriate curves!
+
+		var plotNum = 3;
+
+		// Render chart
 		var colors = ['#999999', '#139bdf', '#333333'];
 		var title = 'Two waves with different frequencies added to obtain a resulting wave'
-		var tones = ['200Hz-5sec', '200Hz-5sec2'];
+		var delays = [0, 0];
 										
-		var curveMain = new Curve(3, -1, 0);
-		var curveFilter = new Curve(2, 1, 0);
+		var curveMain = new Curve(2, 1, delays[0]);
+		var curveFilter = new Curve(10, 1, delays[1]);
 		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
+		var curves = [curveMain, curveFilter, curveResult];
 
 		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
 
-		renderPlot(this.attr('id'), 3, [curveMain, curveFilter, curveResult], origCurves, title, colors, tones);
-	}
+		renderPlot(this.attr('id'), plotNum, curves, origCurves, title, colors);
+
+		// Render play buttons for each song
+		var controlDiv = buildControlUI(plotNum, this.attr('id'));
+		addSoundButtons(plotNum, controlDiv, [TONES[0], TONES[2]], delays);
+	},
+
+	function (){},
+
+	function (){
+
+		var plotNum = 4;
+
+		// Render chart
+		var colors = ['#999999', '#139bdf', '#333333'];
+		var title = 'Two waves with different frequencies added to obtain a resulting wave'
+		var delays = [0, 0];
+										
+		var curveMain = new Curve(2, 1, delays[0]);
+		var curveFilter = new Curve(10, 1, delays[1]);
+		var curveResult = new CombinedCurve([curveMain.ypoints, curveFilter.ypoints]);
+		var curves = [curveMain, curveFilter, curveResult];
+
+		var origCurves = buildOriginalCurves(curveMain.frequency, curveMain.amplitude, curveMain.xshift, curveFilter.frequency, curveFilter.amplitude, curveFilter.xshift);
+
+		var chartInfo = renderPlot(this.attr('id'), plotNum, curves, origCurves, title, colors);
+
+		// Render controlUI, reset button, slider
+		var controlDiv = buildControlUI(plotNum, this.attr('id'));
+		var sliderId = addSlider(plotNum, controlDiv, curves, chartInfo);
+		addResetButton(plotNum, controlDiv, curves, origCurves, chartInfo, sliderId);
+	},
+
+	function (){}
 ]
 
 {% endblock visuals %}

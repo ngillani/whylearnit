@@ -1,4 +1,4 @@
-/******************************************************
+/*****************************************************
   sports.js
   Code for producing interactive elements for sports
   exercises
@@ -25,14 +25,14 @@ var CHART_WIDTH = 500,
 
 // File names for company stock data to visualize
 var _allPlayerData = {};
-_allPlayerData['KobeBryant'] = '/site/exercise-content/sports/player-data/kobe_bryant.csv';
-_allPlayerData['LebronJames'] = '/site/exercise-content/sports/player-data/lebron_james.csv';
-_allPlayerData['DirkNowitzki'] = '/site/exercise-content/sports/player-data/dirk_nowitzki.csv';
-_allPlayerData['DwightHoward'] = '/site/exercise-content/sports/player-data/dwight_howard.csv';
-_allPlayerData['KevinDurant'] = '/site/exercise-content/sports/player-data/kevin_durant.csv';
+_allPlayerData['Kobe Bryant'] = '/site/exercise-content/sports/player-data/kobe_bryant.csv';
+_allPlayerData['Lebron James'] = '/site/exercise-content/sports/player-data/lebron_james.csv';
+_allPlayerData['Dirk Nowitzki'] = '/site/exercise-content/sports/player-data/dirk_nowitzki.csv';
+_allPlayerData['Dwight Howard'] = '/site/exercise-content/sports/player-data/dwight_howard.csv';
+_allPlayerData['Kevin Durant'] = '/site/exercise-content/sports/player-data/kevin_durant.csv';
 
 // TODO:  For testing only - remove!
-var CURR_PLAYER = 'KobeBryant';
+var CURR_PLAYER = 'Kobe Bryant';
 
 var _allStatsData = {};
 
@@ -64,7 +64,12 @@ var _allStatsData = {};
 })();
 
 function drawStatsVisual(companiesToPlot, chosenCategory, elementId){
+
+  var chartId = elementId + '-chart';
+  $('#'+elementId).css('display','inline');
+  $('#'+elementId).html('<div id="' + chartId + '"></div>');
   var data = new google.visualization.DataTable();
+  
 
   // First, build the table that we will use to create our visualization
   // Add columns for each company	
@@ -96,7 +101,7 @@ function drawStatsVisual(companiesToPlot, chosenCategory, elementId){
     colors: colors
   }
 
-  var chart = new google.visualization.ScatterChart(document.getElementById(elementId));
+  var chart = new google.visualization.ScatterChart(document.getElementById(chartId));
   chart.draw(data, options);
 
   // Build the button chart
@@ -108,21 +113,26 @@ function addSelectBoxes(elementId){
 
 	var selectIds = [];
 
+	var selectPaneId = elementId + '-all-selects';
+	var selectHtml = '<div id="' + selectPaneId + '" style="float:left;">';
+
 	for(var col = 0; col < 2; col++){
 		selectIds[col] = elementId + '-select-' + col;
 
-		var selectHtml = '<select id="' + selectIds[col] + '">';
+		selectHtml += (col == 0 ? 'X: ' : 'Y: ') + '<select id="' + selectIds[col] + '" style="width:150px;margin-right:30px;">';
 
 		for(stat in STAT_CATEGORIES){
 			selectHtml += '<option value="' + stat + '">' + stat + '</option>';
 		}
 
 		selectHtml += '</select>';
-
-		// Write to the DOM
-		$('#'+elementId).append(selectHtml);
-		$('#'+selectIds[col]).css({'float': 'left', 'padding-right': '20px'});
 	}
+
+	selectHtml += '</div><br/>';
+
+	// Write to the DOM
+	$('#'+elementId).append(selectHtml);
+	//$('#'+selectPaneId).css('float', 'left', 'padding-right', '20px', 'width', CHART_WIDTH);
 
 	return selectIds;
 }
@@ -174,8 +184,21 @@ function updateStatsAndRedraw(chosenCategory, data, chart, options){
 // note this when called is the '#interactive-n' jQuery div
 function (data) {
   chosenCategory = ['Games','Games'];
-  drawStatsVisual(_allStatsData['KobeBryant'], chosenCategory, this.attr('id'));
-}
+  console.log('CURR ID: ' + this.attr('id'));
+  drawStatsVisual(_allStatsData['Kobe Bryant'], chosenCategory, this.attr('id'));
+},
+
+function (data) {},
+function (data) {},
+
+function (data) {
+  chosenCategory = ['Games','Games'];
+  console.log('CURR ID: ' + this.attr('id'));
+  drawStatsVisual(_allStatsData['Kobe Bryant'], chosenCategory, this.attr('id'));
+},
+
+function (data) {},
+function (data) {}
 ]
 {% endblock visuals %}
 
