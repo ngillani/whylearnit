@@ -13,7 +13,7 @@ def index(request):
 # TODO: Change to render foreducators.html
 def getForEducators(request):
 
-	return render_to_response('index.html')
+	return render_to_response('educators.html')
 
 # TODO: Change to render about.html
 def getAbout(request):

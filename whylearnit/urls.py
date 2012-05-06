@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^packets/(\w+)/(\w+).js', 'whylearnit.views.getPacketJS'),
     url(r'^storePacketResponse/', 'whylearnit.views.storePacketResponse'),
-    url(r'^foreducators/', 'whylearnit.views.getForEducators'),
+    url(r'^educators/', 'whylearnit.views.getForEducators'),
     url(r'^about/', 'whylearnit.views.getAbout'),
 
     # For testing purposes only!
