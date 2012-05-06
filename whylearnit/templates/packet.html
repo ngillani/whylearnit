@@ -11,6 +11,7 @@
     <link href='/site/css/bootstrap.css' rel='stylesheet' type='text/css'>
     <link href='/site/css/bootstrap-responsive.css' rel='stylesheet' type='text/css'>
     <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" media="print" href="/site/css/print-exercise.css" />
     <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
     <link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -63,6 +64,9 @@
           var extpl = Handlebars.compile($('#exercises-tpl').html())
           var rendered = extpl(packet);
           $('#exercises').append(rendered);
+
+          var printtpl = Handlebars.compile($('#print-top-template').html());
+          $('#print-top').append(printtpl({title: packet.title}));
 
           // render visuals
           this.packet.renderVisuals(this.data);
@@ -142,6 +146,14 @@
 <body>
   {% include exercise_template_path %}
   <div class="container-fluid">
+  <div id="print-top">
+    {% tplhandlebars "print-top-template" %}
+    <h1>WhyLearn.it - {{title}}</h1>
+    <div id="print-top-name">Name: </div>
+    <div id="print-top-teacher">Teacher: </div>
+    <span></span>
+    {% endtplhandlebars %}
+  </div>
   <div id="top-bar" class="">
     <p id="logo" class="">whylearn.it?</p>
     <div id="top-bar-buttons">
@@ -240,7 +252,7 @@
     <div class="clear"></div>
 
     <div id="print"></div><div id="email"></div>
-    <div class="page-header">
+    <div id="related-header" class="page-header">
       <h1>Related Videos</h1>
     </div>
     <ul id="related" class="thumbnails"> 

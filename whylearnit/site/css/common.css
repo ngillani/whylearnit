@@ -124,6 +124,7 @@ body{
 
 #main {
   padding-right: 20px;
+  margin-top: 48px;
 }
 /* featured video */
 #watch-main-video{
@@ -163,7 +164,9 @@ body{
 }
 
 #video-title{
-	padding-top:25px;
+  padding: 10px;
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .video{
@@ -316,4 +319,7 @@ body{
 }
 #sidebar li a i {
   padding: 10px;
+}
+#print-top{
+  display: none;
 }

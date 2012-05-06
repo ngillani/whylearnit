@@ -44,6 +44,7 @@ videogames.js
 {% block packet_mods %}
 
 packet.video = 'Yo4YY8xRUAs'
+packet.title = 'Videogames';
 packet.description = $('#videogames-description').html();
 
 packet.exercises = [];
