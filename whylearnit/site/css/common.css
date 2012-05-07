@@ -72,22 +72,33 @@ body{
 }
 
 /* top bar */
-#logo{
+#logo {
+  position: fixed;
+  top: 0;
+  left: 0;
   color: #fff;
   background-color: #139bdf;
+  border: 1px solid #139bdf;
   font-family: "Lovers Quarrel";
   cursor: pointer;
   font-size: 38px;
-  line-height: 38px;
+  line-height: 36px;
   padding: 5px;
-  padding-left: 40px;
+  padding-left: 46px;
   width: 160px;
+}
+
+#logo:hover {
+  background-color: #36a9e3;
+  text-decoration: none;
 }
 
 #top-bar{
   background-color: #36a9e3;
   height: 48px;
   position: fixed;
+  top: 0;
+  left: 0;
   padding-right: 10px;
   z-index: 1000;
   width: 100%;
@@ -96,36 +107,44 @@ body{
 #top-bar-buttons {
   position: fixed;
   top: 0;
-  right: 10px;
+  left: 170px;
 }
 
 .top-bar-button{
   float: right;
   font-size: 18px;
   background-color: #139bdf;
-  font-family: Helvetica, Arial, sans-serif;
-  line-height: 38px;
-  padding: 0 10px 0 10px;  
-  margin-right: 5px;
-  margin-top: -1px;
+  line-height: 36px;
+  padding: 0 15px; 
+  margin-right: 10px;
+  margin-top: 5px;
   cursor: pointer;
   border: 1px solid #139bdf; 
-  -webkit-border-bottom-right-radius: 3px;
-  -webkit-border-bottom-left-radius: 3px;
-  -moz-border-radius-bottomright: 3px;
-  -moz-border-radius-bottomleft: 3px;
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius:5px;
+  border-radius: 5px;
 
 }
 
 .top-bar-button:hover{
-  border: 1px solid #fff; 
+  border: 1px solid #f5f5f5;
+  background-color: #36a9e3;
 }
 
 .top-bar-button > a{
   text-decoration: none;
   color: #fff;
+}
+
+.index-btn {
+  margin-right: 10px;
+  margin-left: 10px;
+  width: 100%;
+}
+
+#index-featured-info {
+  float: right;
+  position: relative;
 }
 
 #main {
@@ -242,12 +261,12 @@ body{
   margin-bottom: 15px;
 }
 
-.next-button {
+#ex-buttons {
   float: right;
   margin-bottom: 10px;
 }
 
-.exercise > .visual {
+.exercise.visual {
   margin-left: auto;
   margin-right: auto;
   width:100%;
