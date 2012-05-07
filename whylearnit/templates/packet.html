@@ -222,7 +222,6 @@
             <textarea></textarea>
             {{/if}}
           </div>
-<<<<<<< HEAD
           <div id="ex-buttons">
             <button type="button" class="back-button btn btn-primary"
               onclick="goToEx({{exid}}, {{exid}} - 1);">Back</button>
@@ -241,22 +240,6 @@
                 {{/each}}
               </ul>
             </div>
-=======
-          <div class="next-button btn-group">
-            <button type="button" class="btn btn-primary btn-main"
-              onclick="goToEx({{exid}}, {{exid}} + 1);">Next Step</button>
-            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a>Jump to step</a></li>
-              <li class="divider"></li>
-              {{#each ../exercises}}
-              {{#dropDown ../exid }}
-              {{/dropDown}}
-              {{/each}}
-            </ul>
->>>>>>> e45272bf6894b3855e35c297d835db94d30e42bb
           </div>
           <div class="clear"></div>
         </div>
