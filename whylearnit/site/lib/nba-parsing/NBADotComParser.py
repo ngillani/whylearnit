@@ -408,6 +408,9 @@ class PlayerStats:
 			# or else NBA.com will hit a 404.	
 			
 			source = "http://www." + league + ".com/playerfile/" + playerURLName + "/career_stats.html"
+
+			# This is a fix to accomodate whylearnit
+			# source = "http://www." + league + ".com/playerfile/" + playerURLName
 			
 			# Load the HTML
 			reponse = ''

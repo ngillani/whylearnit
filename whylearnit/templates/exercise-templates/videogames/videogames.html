@@ -1,7 +1,5 @@
 {% load templatetag_handlebars %}
 
-<!-- page content (scripts, styles) used in the templates can go here -->
-
 <script>
 function Body(x, y, vx, vy, ax, ay){
 	this.reset = function(){
@@ -430,10 +428,42 @@ var setupRealGravity = function(){
 	});
 };
 
+/*
+add hints, word definition popups
+compress all text!
+label axes?
+jumping is a little messed up when you do it a lot
+don’t use weasel words or make them feel better, e.g. “is tricky” -- they’ll use it as an excuse
+don’t use m/s^2, use superscript!
+convey more confidence in their ability: no “to make more clear”
+link tables to graphs
+“what actually happened to the character”
+“and we start not moving” -> “and we’re not moving when we start”
+spell out contractions for clarity
+make pretty demos into more games (add a target to spaceship)
+
+in exercise 6 relate to a number line
+no question in exercise 6
+
+add description about engines & forces
+friction -> resistance (slowing the ball down)
+include familiar equations with friction for example
+make fabric interactive
+educators will tear your grammar apart
+take out the exclamation points
+integrate new science common core: “inquiry” (more open than guided)
+note: open enquiry impossible without internal motivation?
+Ball demo, add equations and pause
+play with things alongside the video (timed show-ups/links?)
+Label the axes with variables
+Add graph for #3 ... work in the visual aspects
+*/
+
 </script>
 <style>
 .gravity-table{
 	border: 1px solid #000;
+	background-color: #fff;
 }
 .gravity-table td{
 	padding: 5px;
@@ -448,10 +478,73 @@ var setupRealGravity = function(){
 .real-list{
 	list-style: circle inside;
 }
+.table-footnote{
+	font-style: italic;
+	font-size: small;
+}
 </style>
 
+
+{% tplhandlebars "videogames-description" %}
+<p>Now you're going to simulate falling. Falling is pretty simple in the real world, but things work differently on computers.</p>
+
+<p>The cool thing about learning to simulate falling is that the same concepts you will use to understand it apply to many other things, like jumping.</p>
+
+<p>All of the examples below use similar rules. Once you've gone through the exercises come back and you'll be able to understand how each one of these systems works.</p>
+
+<h2>Single body</h2>
+<div id="spaceship">
+	<canvas id="spaceship-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+	<br />
+	<input id="spaceship-reset" class="button" type="button" value="Reset" />
+
+	<input data-y="-1" class="spaceship-control button" type="button" value="Up" />
+	<input data-y="1" class="spaceship-control button" type="button" value="Down" />
+	<input data-x="-1" class="spaceship-control button" type="button" value="Left" />
+	<input data-x="1" class="spaceship-control button" type="button" value="Right" />
+	<br />
+	<b>Initial:</b> <span id="spaceship-initial-state"></span>
+	<br />
+	<b>Current:</b> <span id="spaceship-current-state"></span>
+</div>
+<p>Press to apply a force in any direction. The ship points in the direction of its velocity.</p>
+
+<div id="frictionball">
+	<canvas id="frictionball-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
+	<br />
+	<input id="frictionball-reset" class="button" type="button" value="Run" />
+	<br />
+	<b>Initial:</b> <span id="frictionball-initial-state"></span>
+	<br />
+	<b>Current:</b> <span id="frictionball-current-state"></span>
+	<br />
+	Friction: <input type="range" id="frictionball-friction-slider" value="20" />
+</div>
+<p>Friction is a little bit tricky: the friction force increases with how fast the ball is moving, so the force applied to the ball increases as it goes faster, and goes down to zero as it stops.</p>
+
+<h2>Multi-body systems</h2>
+<div id="particles">
+	<canvas id="particles-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
+	<br />
+	<input id="particles-start" class="button" type="button" value="Start" />
+	<br />
+	Initial upwards velocity: <input type="range" id="particles-vertical-velocity-slider" value="4" min="0" max="6" />
+	<br />
+	Sideways velocity: <input type="range" id="particles-horizontal-velocity-slider" value="2" min="-4" max="4" />
+</div>
+<p>You can also make fun, pretty things by playing with the numbers. This is a demonstration of a particle system.</p>
+
+<div id="fabric">
+	<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
+	<br />
+	<input id="fabric-start" class="button" type="button" value="Start" />
+</div>
+<p>This is 100 different bodies with lines drawn between them. Each connected body applies force to the body at the other end of the connection in proportion to the difference between the spring's "ideal" length and its current length. Gravity also pulls all of the nodes down. In addition two points are anchored (don't move regardless of the forces applied to them.)</p>
+
+{% endtplhandlebars %}
+
+
 {% tplhandlebars "videogames-visual-1" %}
-	Fake gravity:
 	<center>
 		<img src="/site/exercise-content/videogames/character.png" id="videogames-visual-character" style="display: none;" />
 		<canvas id="videogames-visual-1-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
@@ -462,7 +555,6 @@ var setupRealGravity = function(){
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-visual-2" %}
-	Real gravity:
 	<center>
 		<canvas id="videogames-visual-2-jumping" width="100" height="200" style="border: 1px solid #000;"></canvas>
 		<canvas id="videogames-visual-2-height-graph" width="500" height="200" style="border: 1px solid #000;"></canvas>
@@ -473,7 +565,7 @@ var setupRealGravity = function(){
 
 
 {% tplhandlebars "videogames-visual-3" %}
-<table class="gravity-table">
+<table class="table-condensed table-striped gravity-table">
 	<tr>
 		<th>Time</th>
 		<th>Height</th>
@@ -511,9 +603,9 @@ var setupRealGravity = function(){
 		<td>10 m/s<sup>2</sup></td>
 	</tr>
 </table>
-<p>[1] Note the units here. The units for height are simple: just meters -- the length of the distance between the character and the ground.</p>
-<p>[2] Units for speed are meters per second (abbreviated m/s), which answers the question: how many meters is the height changing every second?</p>
-<p>[3] Units for acceleration are tricky: meters per second per second (abbreviated m/s^2, squared because it's per second twice.) This answers
+<p class="table-footnote">[1] Note the units here. The units for height are simple: just meters -- the length of the distance between the character and the ground.</p>
+<p class="table-footnote">[2] Units for speed are meters per second (abbreviated m/s), which answers the question: how many meters is the height changing every second?</p>
+<p class="table-footnote">[3] Units for acceleration are tricky: meters per second per second (abbreviated m/s<sup>2</sup>, squared because it's per second twice.) This answers
 			    the question: how many meters per second (speed) are changing every second?</p>
 {% endtplhandlebars %}
 
@@ -521,7 +613,7 @@ var setupRealGravity = function(){
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-visual-5" %}
-<table class="gravity-table">
+<table class="table-condensed table-striped gravity-table">
 	<tr>
 		<th>Time</th>
 		<th>Height</th>
@@ -574,7 +666,7 @@ var setupRealGravity = function(){
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-visual-6" %}
-<table class="gravity-table">
+<table class="table-condensed table-striped gravity-table">
 	<tr>
 		<th>Time</th>
 		<th>Height</th>
@@ -602,7 +694,7 @@ var setupRealGravity = function(){
 	<tr>
 		<td>3</td>
 		<td>30 m</td>
-		<td>0 m/s <span class="table-footnote">**</span></td>
+		<td>0 m/s <span class="table-footnote" style="color: #f00;">**</span></td>
 		<td>10 m/s<sup>2</sup></td>
 	</tr>
 	<tr>
@@ -624,124 +716,66 @@ var setupRealGravity = function(){
 		<td>10 m/s<sup>2</sup></td>
 	</tr>
 </table>
-<p>[1] Remember that for a jump we're starting at the ground.</p>
-<p>[2] And we start not moving.</p>
-<p>[3] Acceleration is -20 m/s^2 due to the jump. After this second, the force from the jump is no longer being applied to the character
+<p class="table-footnote">[1] Remember that for a jump we're starting at the ground.</p>
+<p class="table-footnote">[2] And we start not moving.</p>
+<p class="table-footnote">[3] Acceleration is -20 m/s<sup>2</sup> due to the jump. After this second, the force from the jump is no longer being applied to the character
 			    and the acceleration is just that due to gravity.</p>
-<p>[4] What's a negative speed mean? If we subtract a negative number, the subtractions cancel out and we're adding. In this case 0 m - (-20 m/s * 1 second) = 20m</p>
-{% endtplhandlebars %}
-
-{% tplhandlebars "videogames-visual-7" %}
-<h2>Single body</h2>
-<div id="spaceship">
-	<canvas id="spaceship-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
-	<br />
-	<input id="spaceship-reset" class="button" type="button" value="Reset" />
-
-	<input data-y="-1" class="spaceship-control button" type="button" value="Up" />
-	<input data-y="1" class="spaceship-control button" type="button" value="Down" />
-	<input data-x="-1" class="spaceship-control button" type="button" value="Left" />
-	<input data-x="1" class="spaceship-control button" type="button" value="Right" />
-	<br />
-	<b>Initial:</b> <span id="spaceship-initial-state"></span>
-	<br />
-	<b>Current:</b> <span id="spaceship-current-state"></span>
-</div>
-<p>Press to apply a force in any direction. The ship points in the direction of its velocity.</p>
-
-<div id="frictionball">
-	<canvas id="frictionball-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
-	<br />
-	<input id="frictionball-reset" class="button" type="button" value="Run" />
-	<br />
-	<b>Initial:</b> <span id="frictionball-initial-state"></span>
-	<br />
-	<b>Current:</b> <span id="frictionball-current-state"></span>
-	<br />
-	Friction: <input type="range" id="frictionball-friction-slider" value="20" />
-</div>
-<p>Friction is a little bit tricky: the friction force increases with how fast the ball is moving, so the force applied to the ball increases as it goes faster, and goes down to zero as it stops.</p>
-
-<h2>Multi-body systems</h2>
-<div id="particles">
-	<canvas id="particles-canvas" width="400" height="200" style="border: 1px solid #000;"></canvas>
-	<br />
-	<input id="particles-start" class="button" type="button" value="Start" />
-	<br />
-	Initial upwards velocity: <input type="range" id="particles-vertical-velocity-slider" value="4" min="0" max="6" />
-	<br />
-	Sideways velocity: <input type="range" id="particles-horizontal-velocity-slider" value="2" min="-4" max="4" />
-</div>
-<p>You can also make fun, pretty things by playing with the numbers. This is a demonstration of a particle system.</p>
-
-<div id="fabric">
-	<canvas id="fabric-canvas" width="200" height="200" style="border: 1px solid #000;"></canvas>
-	<br />
-	<input id="fabric-start" class="button" type="button" value="Start" />
-</div>
-<p>This is 100 different bodies with lines drawn between them. Each connected body applies force to the body at the other end of the connection in proportion to the difference between the spring's "ideal" length and its current length. Gravity also pulls all of the nodes down. In addition two points are anchored (don't move regardless of the forces applied to them.)</p>
-{% endtplhandlebars %}
-
-
-{% tplhandlebars "videogames-description" %}
-<p>Now you're going to simulate jumping. Jumping is pretty simple in the real world, but as you'll see soon it can be tricky to make
-it look right on a computer.</p>
-
-<p>We're going to have to tell the computer where the character is for any given time in the jump. We'll give it to the computer in
-terms of its position: how far it is horizontally and vertically from the top left corner of the drawing area. Our character isn't
-going to move horizontally though, so we only need to be able to tell the computer how high up the character will be at any time.</p>
+<p class="table-footnote">[4] What's a negative speed mean? If we subtract a negative number, the subtractions cancel out and we're adding. In this case 0 m - (-20 m/s * 1 second) = 20m</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-1" %}
-<p>So we have the height of the character. How does that change in time? We're going to start with falling.
-When you're falling, your height is changing at some speed. Look at the example above and click "constant speed."
-The character will fall with a speed that remains the same the whole time. Does that look right? If not, what looks
-wrong? What do you think would make it look more realistic?</p>
+<p>Let's start by thinking about height as it changes over time when a character is falling. The character above
+	starts at a height and when you press "Run" moves downwards at a constant speed. Does that look like real falling? If not, what looks
+wrong? What do you think would make it look more realistic?</p> 
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-2" %}
-So the last animation looked a little bit wrong. We know then that the speed that the character is moving as it falls isn't the
-same for the entire fall. So the speed is in fact changing! We have a word for the speed at which speed itself is changing:
-acceleration. Acceleration is caused by a force. The force acting on anything falling on earth is gravity of course. So gravity
-makes things accelerate, which means that it increases the speed that they're falling as they fall. Check out the widget above: does the falling look right now?
+<p>In this one, when you press "Run" the height changes in a different way. The speed which the character falls is
+ no longer constant, but changes. There's a word for the speed which the speed changes at: acceleration. Does this change make it look more like real falling?</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-3" %}
-To make this more clear lets look at how the numbers change in another example. To the right is a table of times with the height,
-speed, and acceleration at each time. Producing a new row of the table follows these rules:
+<p>To illustrate acceleration let's look at some numbers. This is a table where each row is has the position (height), velocity (speed) and acceleration
+for a character every second for 4 seconds.</p>
+
+<p>Producing a new row of the table follows these rules:</p>
 <ol class="real-list">
 	<li>Acceleration doesn't change (since gravity isn't changing!)</li>
 	<li>Speed is increased by the acceleration from the row above. (Acceleration is the speed at which speed is changing!)</li>
 	<li>Height is decreased by the speed from the row above. (Remember that it's a decrease, since the speed is downward!)</li>
 </ol>
-What's the next row of the table? Where is the character now?
+<p>Any <a href="#" rel="tooltip" title="A body is just an object. It could be a character, a person, or a planet." class="tooltip">body</a> in <a href="#" rel="tooltip" title="A body in free-fall is one which is not on the ground or attached to anything to keep it in place." class="tooltip">free-fall</a> follows rules like these.</p>
+<p>What's the next row of the table? What does that mean about where the character is?</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-4" %}
-<p>How fast is the character going when they hit the ground?</p>
-<p>What's happening on row marked **?</p>
+<p>In the previous example, how fast is the character going when they hit the ground?</p>
 {% endtplhandlebars %}
 
 {% tplhandlebars "videogames-exercises-5" %}
-In the previous example we used 10 m/s<sup>2</sup> as a value for acceleration. The real acceleration due to gravity is 9.8 m/s<sup>2</sup>. If we re-did the
-simulation using that number, the table would look like the above. Now look at what happens in second 6: the character has a negative height! That
-would mean they're below the ground, which we don't allow. What's the deal here? What actually happens to the character?
+<p>In the previous example we used 10 m/s<sup>2</sup> as a value for acceleration. The real acceleration due to gravity is 9.8 m/s<sup>2</sup> (regardless of how much something weighs).</p>
+<p>The table above re-does the numbers with that value. Look at what happens after 6 seconds: the character has a negative height! That
+would mean the character went below the ground, which should not be possible. What's the deal here? What would actually happen to the character?</p>
+
 {% endtplhandlebars %}
 
 
 {% tplhandlebars "videogames-exercises-6" %}
-Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
+
+<p>The beauty of the system we have used to understand falling is that it applies to so many other things, like those at the beginning of these exercises.</p>
+
+<p>We'll also do out the numbers for an example with jumping. Jumping is like falling, except for two changes:</p>
+<ul class="real-list">
+	<li>Starts on the ground</li>
+	<li>Starts with a force upwards</li>
+</ul>
+
+<!--Now we understand falling somewhat, using height, speed and acceleration. The beauty of this system is how flexible it is: you can
 make a model to simulate pretty much anything with these three variables. Let's extend falling to jumping. A jump is also a force, but
 it only happens for a moment: while you're pushing off the ground. Let's say the character jumps for 1 second giving them an acceleration
 of -20 m/s<sup>2</sup> for the first second (which means the jump itself is stronger than gravity, and then some). Let's say that gravity is 10 m/s<sup>2</sup>
-again so the numbers are a little bit easier to work with.
-{% endtplhandlebars %}
+again so the numbers are a little bit easier to work with.-->
 
 
-{% tplhandlebars "videogames-exercises-7" %}
-So all we had to do to simulate jumping after we had falling was change the initial acceleration! The rules didn't change at all.
-This setup is actually general enough to simulate physics on a single body! The only change we need to make is to understand everything
-in two directions instead of just one. When we were thinking about falling and jumping we were only thinking about the vertical position,
-but we also need to think about horizontal position if we want to simualate motion which isn't just up and down. So instead of height, we'll have
-position, consisting of an X and a Y coordinate. Similarly, speed is replaced by "velocity," which is the speed in the X and Y directions. Acceleration is still called acceleration, but we need to think of both X acceleration and Y acceleration.
+<p>What's happening on row marked <span style="color: #f00;">**</span>?</p>
 {% endtplhandlebars %}
