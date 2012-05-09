@@ -1,78 +1,117 @@
-{% extends "main.html" %}
 {% load templatetag_handlebars %}
-  {% block header %}
-  {% handlebars_js %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>WhyLearn.it</title>
+    <meta name="description" content="WhyLearnIt site">
+    <meta name="author" content="John Connuck, Nabeel Gillani, Sam Birch">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href='/site/css/bootstrap.css' rel='stylesheet' type='text/css'>
+    <link href='/site/css/bootstrap-responsive.css' rel='stylesheet' type='text/css'>
+    <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" media="print" href="/site/css/print-exercise.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lovers+Quarrel' rel='stylesheet' type='text/css'>
+    <link href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/themes/base/jquery-ui.css' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/site/js/site.js"></script>
+    <script type="text/javascript" src="/site/js/bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="/site/js/bootstrap-popover.js"></script>
+    <script type="text/javascript" src="/site/js/bootstrap-button.js"></script>
+    <script type="text/javascript" src="/site/js/bootstrap-dropdown.js"></script>
+    {% handlebars_js %}
+
   <!--Load SoundManager here for now ... TODO: Lazy load this! -->
   <script type="text/javascript" src="/site/lib/soundmanager/script/soundmanager2-jsmin.js"></script>
   <script> 
-  soundManager.url = '/site/lib/soundmanager/swf/';
-  soundManager.flashVersion = 9;
-  soundManager.useFlashBlock = false;
-  soundManager.useFastPolling = true;
+    soundManager.url = '/site/lib/soundmanager/swf/';
+    soundManager.flashVersion = 9;
+    soundManager.useFlashBlock = false;
+    soundManager.useFastPolling = true;
   </script>
 
-  <!--Load the GOOGLE CHARTS API-->
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-  <script>
-  google.load('visualization', '1.0', {'packages':['corechart']});
-  google.setOnLoadCallback(injectJs);
-  WhyLearnIt = {
-    packet: {},
-    data: {},  
-    selection: function(exid, value) {
-      this.data[exid] = value;
-      console.log(this.data[1]);
-      this.packet.renderVisuals(this.data);
-    },
-    packetLoaded: function(packet){
-      this.packet = packet;
+    <!--Load the GOOGLE CHARTS API-->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script>
+    google.load('visualization', '1.0', {'packages':['corechart']});
+    google.setOnLoadCallback(injectJs);
+      WhyLearnIt = {
+        packet: {},
+        data: {},  
+        selection: function(exid, value) {
+          this.data[exid] = value;
+          console.log(this.data[1]);
+          this.packet.renderVisuals(this.data);
+        },
+        packetLoaded: function(packet){
+          this.packet = packet;
 
-      Handlebars.registerHelper('dropDown', function(curr) {
-        var result = "";
-        if (this.exid != curr) {
-          result = '<li><a href="javascript:goToEx(' + curr + ',' +
-            this.exid + ')">Step ' + this.exid + '</a></li>';
+          Handlebars.registerHelper('dropDown', function(curr) {
+            var result = "";
+            if (this.exid != curr) {
+              result = '<li><a href="javascript:goToEx(' + curr + ',' +
+                this.exid + ')">Step ' + this.exid + '</a></li>';
+            }
+            return new Handlebars.SafeString(result);
+          });
+
+          var vidtpl = Handlebars.compile($('#video-tpl').html())
+          var vidrendered = vidtpl(packet);
+          $('#video-watch').append(vidrendered);
+
+          var extpl = Handlebars.compile($('#exercises-tpl').html())
+          var rendered = extpl(packet);
+          $('#exercises').append(rendered);
+
+          var printtpl = Handlebars.compile($('#print-top-template').html());
+          $('#print-top').append(printtpl({title: packet.title}));
+
+          // render visuals
+          this.packet.renderVisuals(this.data);
+
+          $('.hint').popover({
+            "title": "Hint",
+            "placement": "top"
+          });
+
+          $('.tooltip').tooltip();
+          $('.exercise').hide();
+          console.log($('.exercise'));
+          $('#exercise-1').show();
         }
-        return new Handlebars.SafeString(result);
-      });
+      };
 
-      var vidtpl = Handlebars.compile($('#video-tpl').html())
-      var vidrendered = vidtpl(packet);
-      $('#video-watch').append(vidrendered);
+      function injectJs() {
+        var inject = document.createElement('script');
+        inject.src = '/packets/{{folder}}/{{packet}}.js';
+        document.body.appendChild(inject);
+        setTimeout(scrollStick, 500);
+      }
 
-      var extpl = Handlebars.compile($('#exercises-tpl').html())
-      var rendered = extpl(packet);
-      $('#exercises').append(rendered);
+      /*
+      //TODO:  Don't hardcode the js file
+      $.getJSON('/loadpacket/', {js_file : 'finance.js'}, 
 
-      var printtpl = Handlebars.compile($('#print-top-template').html());
-      $('#print-top').append(printtpl({title: packet.title}));
+      function(data){
+        var JS_FILE = data['AllMetadata']['JSFile'];
+        // Common function found in site.js
+        // Takes exercise info retrieved from the server
+        // and stuffs it into the right divs, etc.
 
-      $('.tooltip').tooltip({'placement':'top', 'trigger' : 'hover'});
-      // render visuals
-      this.packet.renderVisuals(this.data);
-      $('.hint').popover({
-        "title": "Hint",
-        "placement": "top"
-      });
+        populateExerciseContent(data);
+      }
 
-      $('.exercise').hide();
-      $('#exercise-1').show();
-      $("#sidebar-{{packet}}").addClass("active");
-    }
-  };
+      );
 
-  function injectJs() {
-    var inject = document.createElement('script');
-    inject.src = '/packets/{{folder}}/{{packet}}.js';
-    document.body.appendChild(inject);
-    setTimeout(scrollStick, 500);
-  }
+    });*/
 
-  function scrollStick() {
-    var originalPosition = $('#exercises-progress-container').offset().top;
-    var mode = 'normal';
+    function scrollStick() {
+      var originalPosition = $('#exercises-progress-container').offset().top;
+      var mode = 'normal';
 
-    var handler = function(event){
+      var handler = function(event){
         var topOfView = $(window).scrollTop() + 48 + 20; //top bar height included
         var progressbarTop = $('#exercises-progress-container').offset().top;
 
@@ -86,7 +125,7 @@
             borderBottom: '1px solid #e9e9e9',
             backgroundColor: '#f5f5f5',
           });
-        } else if (originalPosition > topOfView && mode == 'float'){
+          }else if (originalPosition > topOfView && mode == 'float'){
           mode = 'normal';
           console.log('switching to normal')
           $('#exercises-progress-container').css({
@@ -95,19 +134,17 @@
             border: 'none'
           });
         }
-    };
+      };
 
-    $(window).on('scroll', handler);
-    handler();
-  }
+      $(window).on('scroll', handler);
+      handler();
+    }
 
   </script>
-  {% endblock header %}
 
-
+</head>
+<body>
   {% include exercise_template_path %}
-
-  {% block print %}
   <div class="container-fluid">
   <div id="print-top">
     {% tplhandlebars "print-top-template" %}
@@ -118,36 +155,35 @@
     {% endtplhandlebars %}
   </div>
   <div id="top-bar" class="">
-    <a id="logo" class="" href="/">whylearn.it?</a>
+    <a href="/" id="logo" class="">whylearn.it?</a>
     <div id="top-bar-buttons">
       <div id="for-educators" class="top-bar-button"><a href="/educators/">for educators</a></div>
       <div id="about" class="top-bar-button"><a href="/about/">about</a></div>
     </div>
   </div>
-  {% endblock print %}
-
-  {% block main %}
-  <div class="container">
   <div id="sidebar" class="well">
     <ul class="nav nav-list">
       <li class="nav-header">
-      EXERCISES
+      OTHER EXERCISES
       </li>
-      <li id="sidebar-finance">
+      <li class="active">
       <a href="../finance/finance"><i class="icon-align-right"></i>Finance</a>
       </li>
-      <li id="sidebar-videogames">
+      <li>
       <a href="../videogames/videogames"><i class="icon-align-left"></i>Video Games</a>
       </li>
-      <li id="sidebar-sports">
+      <li>
       <a href="../sports/sports"><i class="icon-align-center"></i>Sports</a>
       </li>
-      <li id="sidebar-music">
+      <li>
       <a href="../music/music"><i class="icon-music"></i>Music</a>
       </li>
     </ul>
   </div>
-  <div id="main" class="span10 offset2" >
+
+
+
+  <div id="main" class="span10 offset3">
     <div id="video-watch"> 
       {% tplhandlebars "video-tpl" %}
       <div id="video-title">{{title}}</div>
@@ -179,34 +215,28 @@
             {{#if choices}}
             <div class="btn-group" data-toggle="buttons-radio">
               {{#each choices}}
-              <button class="btn" onclick="(function() {
-                WhyLearnIt.selection('{{../exid}}', '{{this}}');
-                goToEx({{../exid}}, {{../exid}} + 1);
-                })()">{{this}}</button>
+              <button class="btn" onclick="WhyLearnIt.selection('{{../exid}}',
+                '{{this}}')">{{this}}</button>
               {{/each}}
             </div>
             {{else}}
             <textarea></textarea>
             {{/if}}
           </div>
-          <div id="ex-buttons">
-            <button type="button" class="back-button btn btn-primary"
-              onclick="goToEx({{exid}}, {{exid}} - 1);">Back</button>
-            <div class="next-button btn-group">
-              <button type="button" class="btn btn-primary"
-                onclick="goToEx({{exid}}, {{exid}} + 1);">Next Step</button>
-              <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu">
-                <li><a>Jump to step</a></li>
-                <li class="divider"></li>
-                {{#each ../exercises}}
-                {{#dropDown ../exid }}
-                {{/dropDown}}
-                {{/each}}
-              </ul>
-            </div>
+          <div class="next-button btn-group">
+            <button type="button" class="btn btn-primary btn-main"
+              onclick="goToEx({{exid}}, {{exid}} + 1);">Next Step</button>
+            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a>Jump to step</a></li>
+              <li class="divider"></li>
+              {{#each ../exercises}}
+              {{#dropDown ../exid }}
+              {{/dropDown}}
+              {{/each}}
+            </ul>
           </div>
           <div class="clear"></div>
         </div>
@@ -240,5 +270,5 @@
 </div>
 </div>
 </div>
-{% endblock main %}
+</body>
 </html>
