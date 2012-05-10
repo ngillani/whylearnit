@@ -1,152 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>WhyLearn.it</title>
-    <meta name="description" content="WhyLearnIt site">
-    <meta name="author" content="John Connuck, Nabeel Gillani, Sam Birch">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <link href='/site/css/bootstrap.css' rel='stylesheet' type='text/css'>
-    <link href='/site/css/bootstrap-responsive.css' rel='stylesheet' type='text/css'>
-    <link href='/site/css/common.css' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    <div class='container'>
-      <nav id="top-bar">
-      <div id="logo" class='label label-info'><a href="/">whylearn.it</a></div>
-      <div id="for-educators" class="top-bar-button"><a href="/foreducators/">For Educators</a></div>
-      <div id="about" class="top-bar-button"><a href="/about/	">About</a></div>
-      <div class="clear"></div>
-      </nav>
-
-      <div id="video-watch" class="row">
-        <div class="span8 offset2">
-          <div id="watch-main-video">
-            <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
-          </div>
-          <div id="exercises">
-            <div id="exercises-progress" class="progress progress-striped"
-              ><div class="bar" style="width: 33%"></div></div>
-
-            <div class="alert alert-success exercise completed">
-              <h3>Exercise 1</h3>
-              <img src="/site/assets/fake-visualizations/1.png" />
-              <div class="exercise-content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas?
-                <textarea></textarea>
-                <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="alert alert-info exercise current">
-              <h3>Exercise 2</h3>
-              <img src="/site/assets/fake-visualizations/2.png" />
-              <div class="exercise-content">
-                Moloch! Moloch! Nightmare of Moloch! Moloch the loveless! Mental Moloch! Moloch the heavy judger of men!
-                <textarea></textarea>
-                <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
-              </div>
-              <div class="clear"></div>
-            </div>
-            <div class="hero-unit exercise incomplete">
-              <h3>Exercise 3</h3>
-              <img src="/site/assets/fake-visualizations/3.png" />
-              <div class="exercise-content">
-                What sphinx of cement and aluminium bashed open their skulls and ate up their brains and imagination?
-                <textarea></textarea>
-                <button type="button" class="btn btn-primary next-button" onclick="showNextExercise(1);">Next Step</button>
-              </div>
-              <div class="clear"></div>
-            </div>
-          </div>
-          <div id="learn-more" class="hero-unit">
-            <h2>Learn more</h2>
-            <ul>
-              <li><a href="http://www.google.com">At...</a></li>
-              <li><a href="http://www.google.com">One...</a></li>
-              <li><a href="http://www.google.com">Of...</a></li>
-              <li><a href="http://www.google.com">These...</a></li>
-              <li><a href="http://www.google.com">Sites...</a></li>
-            </ul>
-          </div>
-          <div id="print"></div><div id="email"></div>
-          <div class="page-header">
-            <h1>Related Videos</h1>
-          </div>
-          <div id="related-wrapper" class="hero-unit">
-            <ul id="related" > 
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-              <li class="video"><a href="#" class="thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div id="front-page">
-        <div id="featured-content">
-          <div id="main-video">
-            <iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/2uYs0gJD-LE" frameborder="0"></iframe>
-          </div>
-          <div id="description-bar">
-            <h3>What is WhyLearnIt?</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate leo ac magna dapibus faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras sed ipsum dui. In hac habitasse platea dictumst. Praesent consectetur, dui dictum condimentum auctor, tortor purus pulvinar augue, ut varius sapien enim id dui. Morbi quis lorem diam. Sed accumsan, neque nec aliquet malesuada, nibh risus gravida diam, quis dictum tortor dui in eros. Morbi sagittis mauris vel sem sollicitudin pretium. Mauris sed ante risus, ac porttitor nisi.</p>
-          </div>
-
-          <div class="clear"></div>
-        </div>
-
-        <ul id="videos">
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-          <li class="video thumbnail"><img src="http://placehold.it/260x180" alt="video title" /></li>
-        </ul>
+{% extends "main.html" %}
+{% block header %}
+<script>
+WhyLearnIt = {
+    packet: {},
+    data: {},  
+    selection: function(exid, value) {
+      this.data[exid] = value;
+      console.log(this.data[1]);
+      this.packet.renderVisuals(this.data);
+    },
+    packetLoaded: function(packet){
+      this.packet = packet;
+    }
+};
+$(function() {
+  var inject = document.createElement('script');
+  inject.src = '/packets/finance/finance.js';
+  document.body.appendChild(inject);
+});
+</script>
+{% endblock header%}
+{% block main %}
+<div class="container">
+</br>
+  <div class="row">
+    <div id="index-featured" class="well span12">       
+      <iframe class="youtube-player" type="text/html" width="650"
+          height="450"
+          src="http://www.youtube.com/embed/cD-8et3oNDk?theme=dark&modestbranding=1&wmode=transparent"
+          frameborder="0" wmode="Opaque">
+      </iframe>
+      <div id="index-featured-info">
+        <h1>Music: Learning How to DJ</h1>
+        <h2>with Steven</h2>
+        </br>
+        <h1>Topics:</h1>
+        <h2>Algebra, Geometry</h2>
+      </br>
+      <p style="color: #139bdf;">What does math have to do with music? Good Question. Click to find out!</p> 
+      <a href="/music/music" class="btn btn-large btn-primary">Beast Music
+        <i class="icon-music icon-white"></i></a>
       </div>
     </div>
-
-  </body>
-</html>
+  </div>
+  <div class="row">
+    <div id="index-finance" class="index-box span3 alert alert-warning">
+      <a href="finance/finance" class="index-btn btn btn-large btn-warning">Learn about Finance <i class="icon-align-right icon-white"></i></a>
+    </div>
+    <div id="index-videogames" class="index-box span3 alert alert-error">
+      <a href="videogames/videogames" class="index-btn btn btn-large btn-danger">Explore Video Games <i class="icon-align-left icon-white"></i></a>
+    </div>
+    <div id="index-sports" class="index-box span3 alert alert-success">
+      <a href="sports/sports" class="index-btn btn btn-large btn-success">Check out Sports <i class="icon-align-center icon-white"></i></a>
+    </div>
+    <div id="index-info" class="index-box span3 alert alert-info">
+      <a href="educators" class="index-btn btn btn-large btn-info">For educators <i class="icon-book icon-white"></i></a>
+    </div>
+  </div>
+</div>
+{% endblock main %}

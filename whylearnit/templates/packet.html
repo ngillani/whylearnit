@@ -23,14 +23,14 @@
     <script type="text/javascript" src="/site/js/bootstrap-dropdown.js"></script>
     {% handlebars_js %}
 
-	<!--Load SoundManager here for now ... TODO: Lazy load this! -->
-	<script type="text/javascript" src="/site/lib/soundmanager/script/soundmanager2-jsmin.js"></script>
-	<script> 
-		soundManager.url = '/site/lib/soundmanager/swf/';
-		soundManager.flashVersion = 9;
-		soundManager.useFlashBlock = false;
-		soundManager.useFastPolling = true;
-	</script>
+  <!--Load SoundManager here for now ... TODO: Lazy load this! -->
+  <script type="text/javascript" src="/site/lib/soundmanager/script/soundmanager2-jsmin.js"></script>
+  <script> 
+    soundManager.url = '/site/lib/soundmanager/swf/';
+    soundManager.flashVersion = 9;
+    soundManager.useFlashBlock = false;
+    soundManager.useFastPolling = true;
+  </script>
 
     <!--Load the GOOGLE CHARTS API-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -155,9 +155,9 @@
     {% endtplhandlebars %}
   </div>
   <div id="top-bar" class="">
-    <p id="logo" class="">whylearn.it?</p>
+    <a href="/" id="logo" class="">whylearn.it?</a>
     <div id="top-bar-buttons">
-      <div id="for-educators" class="top-bar-button"><a href="/foreducators/">for educators</a></div>
+      <div id="for-educators" class="top-bar-button"><a href="/educators/">for educators</a></div>
       <div id="about" class="top-bar-button"><a href="/about/">about</a></div>
     </div>
   </div>
