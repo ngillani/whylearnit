@@ -1,24 +1,5 @@
 {% extends "main.html" %}
 {% block header %}
-<script>
-WhyLearnIt = {
-    packet: {},
-    data: {},  
-    selection: function(exid, value) {
-      this.data[exid] = value;
-      console.log(this.data[1]);
-      this.packet.renderVisuals(this.data);
-    },
-    packetLoaded: function(packet){
-      this.packet = packet;
-    }
-};
-$(function() {
-  var inject = document.createElement('script');
-  inject.src = '/packets/finance/finance.js';
-  document.body.appendChild(inject);
-});
-</script>
 {% endblock header%}
 {% block main %}
 <div class="container">
