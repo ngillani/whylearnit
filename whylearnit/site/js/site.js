@@ -49,5 +49,6 @@ function goToEx(currId, nextId) {
 function openPrintPage(){
 
 	  // TODO:  Build formatted print page, open new tab, open print dialog
-	  window.open("", "_newtab");
+	  //window.open("", "_newtab");
+    window.print();
 }
